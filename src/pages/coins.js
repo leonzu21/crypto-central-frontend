@@ -38,7 +38,7 @@ Coins.getLayout = (page) => (
 // This gets called on every request
 export async function getStaticProps() {
     // Fetch data from external API
-    const res = await fetch(`http://cryptocentral-env.eba-vphjzryf.eu-central-1.elasticbeanstalk.com/api/coins`)
+    const res = await fetch(`https://dmc8ptcuv1dn8.cloudfront.net/api/coins`)
     const data = await res.json()
   
     // Pass data to the page via props

@@ -17,7 +17,7 @@ import { TransactionListToolbar } from "../components/transaction/transaction-li
 
 const fetcher = async () => {
   const res = await fetch(
-    `http://cryptocentral-env.eba-vphjzryf.eu-central-1.elasticbeanstalk.com/api/transactions`, 
+    `https://dmc8ptcuv1dn8.cloudfront.net/api/transactions`, 
   )
   const data = await res.json()
   return data
