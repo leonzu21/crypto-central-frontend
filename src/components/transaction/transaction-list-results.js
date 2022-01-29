@@ -86,8 +86,8 @@ export const TransactionListResults = ({ transactions, ...rest }) => {
                     >
                       {transaction.toOwner ? transaction.toOwner : "unknown"}
                     </TableCell>
-                    <TableCell>{transaction.amount}</TableCell>
-                    <TableCell>{transaction.amountUsd}</TableCell>
+                    <TableCell>{transaction.amount.toLocaleString()}</TableCell>
+                    <TableCell>{transaction.amountUsd.toLocaleString()}</TableCell>
                   </TableRow>
                 );
               })}
