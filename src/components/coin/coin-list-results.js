@@ -21,7 +21,6 @@ export const CoinListResults = ({ coins, ...rest }) => {
   const [selectedCoinIds, setSelectedCoinIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  console.log(coins);
 
   const handleSelectAll = (event) => {
     let newSelectedCoinIds;

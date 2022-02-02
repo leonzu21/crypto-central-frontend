@@ -22,7 +22,7 @@ const Coins = (props) => (
       <Container maxWidth={false}>
         <CoinListToolbar />
         <Box sx={{ mt: 3 }}>
-          <CoinListResults coins={props.data} />
+          {/* <CoinListResults coins={props.data} /> */}
         </Box>
       </Container>
     </Box>
@@ -35,16 +35,16 @@ Coins.getLayout = (page) => (
 );
 
 
-// This gets called on every request
-export async function getStaticProps() {
-    // Fetch data from external API
-    const res = await fetch(`https://dmc8ptcuv1dn8.cloudfront.net/api/coins`)
-    const data = await res.json()
+// // This gets called on every request
+// export async function getStaticProps() {
+//     // Fetch data from external API
+//     const res = await fetch(`https://dmc8ptcuv1dn8.cloudfront.net/api/coins`)
+//     const data = await res.json()
   
-    // Pass data to the page via props
-    return { 
-          props: { data },
-          revalidate: 5 }
-      }
+//     // Pass data to the page via props
+//     return { 
+//           props: { data },
+//           revalidate: 5 }
+//       }
 
 export default Coins;
