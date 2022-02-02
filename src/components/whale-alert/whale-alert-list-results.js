@@ -47,7 +47,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const WhaleAlertListResults = ({ ...rest }) => {
   const [endpoint, setEndpoint] = useState(
-    `findAllByMonthOrderByAmountDesc?theDate=${getCurrentDate["year"]}-${getCurrentDate["month"]}-${getCurrentDate["day"]}`
+    `findAllByDayOrderByAmountDesc?theDate=${getCurrentDate()["currDate"]}`
   );
   const [date, setDate] = useState(null);
   const [day, setDay] = useState(null);
@@ -65,7 +65,7 @@ export const WhaleAlertListResults = ({ ...rest }) => {
       setMonth(currentDate["month"]);
       setYear(currentDate["year"]);
       setEndpoint(
-        `findAllByDayOrderByAmountDesc?theDate=${year}-${month}-${day}`
+        `findAllByDayOrderByAmountDesc?theDate=${currentDate["year"]}-${currentDate["month"]}-${currentDate["day"]}`
       );
     }
   }, []);
