@@ -1,38 +1,43 @@
 import Head from "next/head";
-import useSWR from "swr";
-import { Box, Container } from "@mui/material";
+import useSWRInfinite from "swr/infinite";
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Demo,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from "@mui/material";
+import React from "react";
+import FolderIcon from "@mui/icons-material/ArrowRightTwoTone";
 import { DashboardLayout } from "../components/dashboard-layout";
-import { TransactionListResults } from "../components/transaction/transaction-list-results";
-import { TransactionListToolbar } from "../components/transaction/transaction-list-toolbar";
+import { WhaleAlertListResults } from "../components/whale-alert/whale-alert-list-results";
+import { WhaleAlertListToolbar } from "../components/whale-alert/whale-alert-list-toolbar";
 
-// // This gets called on every request
-// export const getStaticProps = async () => {
-//     // Fetch data from external API
-//     const res = await fetch(`http://cryptocentral-env.eba-vphjzryf.eu-central-1.elasticbeanstalk.com/api/transactions`)
-//     const data = await res.json()
 
-//     // Pass data to the page via props
-//     return {props: { data }}
-//   }
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const fetcher = async () => {
-  const res = await fetch(
-    `https://dmc8ptcuv1dn8.cloudfront.net/api/transactions`, 
-  )
-  const data = await res.json()
-  return data
-};
 
 const WhaleAlerts = () => {
-  const { data, error } = useSWR("whalealerts", fetcher);
-
-  console.log(data);
-
-  if (error) {
-      console.log(error);
-      return "An error has occured";
-  }
+  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
+    (index) =>
+      `http://localhost:5000/api/transactions/search/findAllByDayOrderByAmountDesc?theDate=2022-02-01&page=${index}`,
+    fetcher
+  );
   if (!data) return "Loading...";
+
+  const transactions = data ? [].concat(...data) : [];
+  const isLoadingInitialData = !data && !error;
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && data && typeof data[size - 1] === "undefined");
+  const isEmpty = data?.[0]?.length === 0;
+  const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < 6);
+  const isRefreshing = isValidating && data && data.length === size;
   return (
     <>
       <Head>
@@ -46,10 +51,14 @@ const WhaleAlerts = () => {
         }}
       >
         <Container maxWidth={false}>
-          <TransactionListToolbar />
+          <WhaleAlertListToolbar />
           <Box sx={{ mt: 3 }}>
-              {data[0].title}
-            <TransactionListResults transactions={data} />
+            <Grid item xs={12} md={12}>
+              <WhaleAlertListResults/>
+              
+              {isEmpty ? <p>Yay, no transactions found.</p> : null}
+            </Grid>
+            {/* <button onClick={() => setSize(size + 1)}>Load More</button> */}
           </Box>
         </Container>
       </Box>
