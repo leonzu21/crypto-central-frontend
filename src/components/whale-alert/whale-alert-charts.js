@@ -32,7 +32,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("dai");
-  const [symbol, setSymbol] = useState(null);
+  const [symbol, setSymbol] = useState('');
   const [symbolValue, setSymbolValue] = useState(null);
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
