@@ -32,17 +32,17 @@ const WhaleAlertRow = ({ transaction, ...rest }) => {
       </TableCell>
       <TableCell
         style={{
-          color: transaction.fromOwner ? "green" : "black",
+          color: transaction.fromOwner ? "#E65100" : "black",
         }}
       >
-        {transaction.fromOwner ? transaction.fromOwner : "unknown"}
+        {transaction.fromOwner ? transaction.fromOwner : "wallet"}
       </TableCell>
       <TableCell
         style={{
-          color: transaction.toOwner ? "green" : "black",
+          color: transaction.toOwner ? "#E65100" : "black",
         }}
       >
-        {transaction.toOwner ? transaction.toOwner : "unknown"}
+        {transaction.toOwner ? transaction.toOwner : "wallet"}
       </TableCell>
       <TableCell>{transaction.amount.toLocaleString()}</TableCell>
       <TableCell>{transaction.amountUsd.toLocaleString()}</TableCell>
