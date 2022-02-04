@@ -3,6 +3,8 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import PropTypes from "prop-types";
 import useSWRInfinite from "swr/infinite";
 import WhaleAlertRow from "./whale-alert-row";
+import "react-perfect-scrollbar/dist/css/styles.css";
+
 
 import DatePicker from "@mui/lab/DatePicker";
 
@@ -24,30 +26,15 @@ import {
   TextField,
   Grid,
 } from "@mui/material";
-import { getInitials } from "../../utils/get-initials";
-import daysToWeeks from "date-fns/fp/daysToWeeks";
 
-const getCurrentDate = (separator = "-") => {
-  let newDate = new Date();
-  let date = newDate.getDate();
-  let month = newDate.getMonth() + 1;
-  let year = newDate.getFullYear();
+import { GetCurrentDate } from "src/utils/get-current-date";
 
-  return {
-    currDate: `${year}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${date < 10 ? `0${date}` : `${date}`}`,
-    day: date < 10 ? `0${date}` : `${date}`,
-    month: month < 10 ? `0${month}` : `${month}`,
-    year: year,
-  };
-};
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const WhaleAlertListResults = ({ ...rest }) => {
   const [endpoint, setEndpoint] = useState(
-    `findAllByDayOrderByAmountDesc?theDate=${getCurrentDate()["currDate"]}`
+    `findAllByDayOrderByAmountDesc?theDate=${GetCurrentDate()["currDate"]}`
   );
   const [date, setDate] = useState(null);
   const [day, setDay] = useState(null);
@@ -57,7 +44,7 @@ export const WhaleAlertListResults = ({ ...rest }) => {
   const [filterBy, setFilterBy] = useState("Day");
 
   useEffect(() => {
-    const currentDate = getCurrentDate();
+    const currentDate = GetCurrentDate();
     console.log(`[useEffect] -----> ${day}`);
     if (!day) {
       setDate(currentDate["currDate"]);
@@ -78,8 +65,10 @@ export const WhaleAlertListResults = ({ ...rest }) => {
     fetcher
   );
   if (!data) return "Loading...";
-
-  const transactions = data ? [].concat(...data) : [];
+  console.log(data);
+  // const transactions = data ? [].concat(...data) : [];
+  const transactions = data;
+  // console.log(transactions);
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
@@ -114,7 +103,7 @@ export const WhaleAlertListResults = ({ ...rest }) => {
                   setFilterBy("Day");
                 }}
               >
-                Daily
+                1 Day
               </Button>
               <Button
                 onClick={() => {
@@ -124,7 +113,7 @@ export const WhaleAlertListResults = ({ ...rest }) => {
                   setFilterBy("Month");
                 }}
               >
-                Monthly
+                1 Month
               </Button>
               <Button
                 onClick={() => {
@@ -132,7 +121,7 @@ export const WhaleAlertListResults = ({ ...rest }) => {
                   setFilterBy("Year");
                 }}
               >
-                Yearly
+                1 Year
               </Button>
             </ButtonGroup>
           </Grid>
