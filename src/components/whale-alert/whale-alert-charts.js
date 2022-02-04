@@ -32,7 +32,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
   );
 
   const { data, error } = useSWR(
-    `http://localhost:5000/api/whales/${endpoint}`,
+    `https://dmc8ptcuv1dn8.cloudfront.net/api/whales/${endpoint}`,
     fetcher
   );
 
