@@ -11,12 +11,28 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import useSWR from "swr";
 import nFormatter from "src/utils/n-formatter";
 
+import moment from 'moment';
 
 
-const TotalChart = ({ data, ...rest }) => {
+const formatAxis = (tickItem, filterBy) => {
+  let format = "HH";
+  switch (filterBy) {
+    case "dai":
+      format = "HH";
+      break;
+    case "month":
+      format = "DD";
+      break;
+    case "year":
+      format = "MMM";
+      break;
+  }
+  return moment(tickItem).format(format);
+};
+
+const TotalChart = ({ data, filterBy, ...rest }) => {
   
 
   return (
@@ -37,7 +53,7 @@ const TotalChart = ({ data, ...rest }) => {
           }}
         >
           <CartesianGrid strokeDasharray="4 4" />
-          <XAxis dataKey={new Date("Timestamp").getHours()} />
+          <XAxis dataKey="Timestamp" tickFormatter={(tick) => formatAxis(tick, filterBy)} />
           <YAxis
             tickFormatter={(tick) => {
               return nFormatter(tick);

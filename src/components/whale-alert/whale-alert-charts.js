@@ -32,7 +32,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("dai");
-  const [symbol, setSymbol] = useState('');
+  const [symbol, setSymbol] = useState("");
   const [symbolValue, setSymbolValue] = useState(null);
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
@@ -97,7 +97,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                 sx={{ width: 300 }}
                 onInputChange={(event, newValue) => {
                   setSymbolValue(newValue);
-                  let symb = newValue ? `&theSymbol=${newValue}` : '';
+                  let symb = newValue ? `&theSymbol=${newValue}` : "";
                   setSymbol(symb);
                   switch (filterBy) {
                     case "dai":
@@ -170,22 +170,24 @@ export const WhaleAlertCharts = ({ ...rest }) => {
           </Grid>
         </Grid>
       </Box>
-      <Grid container justifyContent="center" alignItems="center">
-        <Grid item xs={11}>
-          <ToFromChart data={data} />
+      {data ? (
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item xs={11}>
+            <ToFromChart data={data} filterBy={filterBy} />
+          </Grid>
+          <Grid item xs={12}>
+            <Divider size="medium" sx={{ m: 2 }}>
+              <Chip size="medium" label="Total and Difference" />
+            </Divider>
+          </Grid>
+          <Grid item xs={6}>
+            <TotalChart data={data} filterBy={filterBy} />
+          </Grid>
+          <Grid item xs={6}>
+            <DifferenceChart data={data} filterBy={filterBy} />
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Divider size="medium" sx={{ m: 2 }}>
-            <Chip size="medium" label="Total and Difference" />
-          </Divider>
-        </Grid>
-        <Grid item xs={6}>
-          <TotalChart data={data} />
-        </Grid>
-        <Grid item xs={6}>
-          <DifferenceChart data={data} />
-        </Grid>
-      </Grid>
+      ) : null}
     </Card>
   );
 };
