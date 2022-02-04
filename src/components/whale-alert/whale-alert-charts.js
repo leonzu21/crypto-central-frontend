@@ -12,6 +12,7 @@ import {
   Grid,
   Divider,
   Chip,
+  Autocomplete,
 } from "@mui/material";
 
 import ToFromChart from "./whale-alert-charts/to-from-chart";
@@ -20,6 +21,10 @@ import DifferenceChart from "./whale-alert-charts/difference-chart";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+const updateUrl = () => {
+  setEndpoint(``);
+};
+
 export const WhaleAlertCharts = ({ ...rest }) => {
   const currDate = GetCurrentDate();
   const [day, setDay] = useState(currDate["day"]);
@@ -27,9 +32,20 @@ export const WhaleAlertCharts = ({ ...rest }) => {
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("dai");
+  const [symbol, setSymbol] = useState(null);
+  const [symbolValue, setSymbolValue] = useState(null);
+  const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
     `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
   );
+
+  // 3. Create out useEffect function
+  useEffect(() => {
+    fetch("https://dmc8ptcuv1dn8.cloudfront.net/api/symbols/all")
+      .then((response) => response.json())
+      // 4. Setting *dogImage* to the image url that we received from the response above
+      .then((data) => setCoins(data));
+  }, []);
 
   const { data, error } = useSWR(
     `https://dmc8ptcuv1dn8.cloudfront.net/api/whales/${endpoint}`,
@@ -40,12 +56,14 @@ export const WhaleAlertCharts = ({ ...rest }) => {
     <Card {...rest}>
       <Box sx={{ m: 1 }}>
         <Grid container>
-          <Grid item xs={8} md={8}>
+          <Grid item xs={4}>
             <ButtonGroup size="small" color="primary" aria-label="small group">
               <Button
                 onClick={() => {
                   setFilterBy("dai");
-                  setEndpoint(`dailyChart?theDate=${year}-${month}-${day}`);
+                  setEndpoint(
+                    `dailyChart?theDate=${year}-${month}-${day}${symbol}`
+                  );
                 }}
               >
                 1 Day
@@ -53,7 +71,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
               <Button
                 onClick={() => {
                   setFilterBy("month");
-                  setEndpoint(`monthlyChart?theDate=${year}-${month}`);
+                  setEndpoint(`monthlyChart?theDate=${year}-${month}${symbol}`);
                 }}
               >
                 1 Month
@@ -61,19 +79,58 @@ export const WhaleAlertCharts = ({ ...rest }) => {
               <Button
                 onClick={() => {
                   setFilterBy("year");
-                  setEndpoint(`yearlyChart?theDate=${year}`);
+                  setEndpoint(`yearlyChart?theDate=${year}${symbol}`);
                 }}
               >
                 1 Year
               </Button>
             </ButtonGroup>
           </Grid>
+          <Grid item xs={4}>
+            {coins ? (
+              <Autocomplete
+                size="small"
+                disablePortal
+                id="combo-box-demo"
+                value={symbolValue}
+                options={coins}
+                sx={{ width: 300 }}
+                onInputChange={(event, newValue) => {
+                  setSymbolValue(newValue);
+                  let symb = newValue ? `&theSymbol=${newValue}` : '';
+                  setSymbol(symb);
+                  switch (filterBy) {
+                    case "dai":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
+                      );
+                      break;
+                    case "month":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${year}-${month}${symb}`
+                      );
+                      break;
+                    case "year":
+                      setEndpoint(`${filterBy}lyChart?theDate=${year}${symb}`);
+                      break;
+                    default:
+                      setEndpoint(
+                        `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
+                      );
+                      break;
+                  }
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Symbol" />
+                )}
+              />
+            ) : null}
+          </Grid>
           <Grid item xs={4} md={4}>
             <DatePicker
               label="Choose a date"
               value={value}
               onChange={(newValue) => {
-                console.log("salut");
                 let calDay = newValue.getDate();
                 let calMonth = newValue.getMonth() + 1;
                 calMonth = calMonth < 10 ? `0${calMonth}` : `${calMonth}`;
@@ -82,20 +139,22 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                 switch (filterBy) {
                   case "dai":
                     setEndpoint(
-                      `${filterBy}lyChart?theDate=${calYear}-${calMonth}-${calDay}`
+                      `${filterBy}lyChart?theDate=${calYear}-${calMonth}-${calDay}${symbol}`
                     );
                     break;
                   case "month":
                     setEndpoint(
-                      `${filterBy}lyChart?theDate=${calYear}-${calMonth}`
+                      `${filterBy}lyChart?theDate=${calYear}-${calMonth}${symbol}`
                     );
                     break;
                   case "year":
-                    setEndpoint(`${filterBy}lyChart?theDate=${calYear}`);
+                    setEndpoint(
+                      `${filterBy}lyChart?theDate=${calYear}${symbol}`
+                    );
                     break;
                   default:
                     setEndpoint(
-                      `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
+                      `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}${symbol}`
                     );
                     break;
                 }
@@ -115,7 +174,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
         <Grid item xs={11}>
           <ToFromChart data={data} />
         </Grid>
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <Divider size="medium" sx={{ m: 2 }}>
             <Chip size="medium" label="Total and Difference" />
           </Divider>
