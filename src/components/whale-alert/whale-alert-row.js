@@ -1,11 +1,21 @@
-import { Box, TableCell, TableRow, Typography } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import moment from "moment";
 
 const WhaleAlertRow = ({ transaction, ...rest }) => {
+  const isDesktopFormat = useMediaQuery("(min-width:700px)");
   return (
     <TableRow hover>
-      <TableCell>{moment(transaction.timestamp).format("dd HH:mm")}</TableCell>
+      {isDesktopFormat ? (
+        <TableCell>
+          {moment(transaction.timestamp).format("yyyy-MM-DD HH:mm")}
+        </TableCell>
+      ) : (
+        <TableCell>
+          {moment(transaction.timestamp).format("dd HH:mm")}
+        </TableCell>
+      )}
       <TableCell>{transaction.symbol}</TableCell>
       <TableCell
         style={{
