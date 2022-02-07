@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   BarChart,
   Bar,
+  Brush,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -34,6 +37,8 @@ const formatAxis = (tickItem, filterBy) => {
 };
 
 const DifferenceChart = ({ data, filterBy, ...rest }) => {
+  const isDesktopFormat = useMediaQuery("(min-width:700px)");
+
   return (
     <div style={{ width: "100%", height: 350 }}>
       <ResponsiveContainer width="100%" height="100%">
@@ -67,9 +72,15 @@ const DifferenceChart = ({ data, filterBy, ...rest }) => {
 
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
+          {!isDesktopFormat ? (
+            <Brush dataKey="name" height={30} stroke="#8884d8" />
+          ) : null}
           <Bar dataKey="Difference" fill="#EF5350">
             {data.map((entry, index) => (
-              <Cell key={index} fill={entry["Difference"] < 0 ? "#EF5350" : "#4DB6AC"} />
+              <Cell
+                key={index}
+                fill={entry["Difference"] < 0 ? "#EF5350" : "#4DB6AC"}
+              />
             ))}
           </Bar>
         </BarChart>

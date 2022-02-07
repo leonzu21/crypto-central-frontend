@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import {
   BarChart,
   Bar,
-  Cell,
+  Brush,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,8 +15,7 @@ import {
 
 import nFormatter from "src/utils/n-formatter";
 
-import moment from 'moment';
-
+import moment from "moment";
 
 const formatAxis = (tickItem, filterBy) => {
   let format = "HH";
@@ -33,7 +34,7 @@ const formatAxis = (tickItem, filterBy) => {
 };
 
 const TotalChart = ({ data, filterBy, ...rest }) => {
-  
+  const isDesktopFormat = useMediaQuery("(min-width:700px)");
 
   return (
     <div style={{ width: "100%", height: 350 }}>
@@ -53,14 +54,22 @@ const TotalChart = ({ data, filterBy, ...rest }) => {
           }}
         >
           <CartesianGrid strokeDasharray="4 4" />
-          <XAxis dataKey="Timestamp" tickFormatter={(tick) => formatAxis(tick, filterBy)} />
+          <XAxis
+            dataKey="Timestamp"
+            tickFormatter={(tick) => formatAxis(tick, filterBy)}
+          />
           <YAxis
             tickFormatter={(tick) => {
               return nFormatter(tick);
             }}
           />
-          <Tooltip formatter={(value) => new Intl.NumberFormat('en').format(value)} />
+          <Tooltip
+            formatter={(value) => new Intl.NumberFormat("en").format(value)}
+          />
           <Legend />
+          {!isDesktopFormat ? (
+            <Brush dataKey="name" height={30} stroke="#8884d8" />
+          ) : null}
           <Bar dataKey="Total" fill="#4DB6AC" />
         </BarChart>
       </ResponsiveContainer>
