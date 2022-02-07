@@ -1,35 +1,12 @@
-import {
-    Avatar,
-    Box,
-    Card,
-    Checkbox,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Typography,
-    Button,
-    ButtonGroup,
-  } from "@mui/material";
+import { Box, TableCell, TableRow, Typography } from "@mui/material";
+
+import moment from "moment";
 
 const WhaleAlertRow = ({ transaction, ...rest }) => {
   return (
     <TableRow hover>
-      <TableCell>{transaction.timestamp}</TableCell>
-      <TableCell>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
-          <Typography color="textPrimary" variant="body1">
-            {transaction.symbol}
-          </Typography>
-        </Box>
-      </TableCell>
+      <TableCell>{moment(transaction.timestamp).format("dd HH:mm")}</TableCell>
+      <TableCell>{transaction.symbol}</TableCell>
       <TableCell
         style={{
           color: transaction.fromOwner ? "#E65100" : "black",

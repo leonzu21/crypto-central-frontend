@@ -56,7 +56,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
     <Card {...rest}>
       <Box sx={{ m: 1 }}>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item md={4} xs={12} sx={{ mb: { xs: 1 } }}>
             <ButtonGroup size="small" color="primary" aria-label="small group">
               <Button
                 onClick={() => {
@@ -86,7 +86,12 @@ export const WhaleAlertCharts = ({ ...rest }) => {
               </Button>
             </ButtonGroup>
           </Grid>
-          <Grid item xs={4}>
+          <Grid
+            item
+            md={4}
+            xs={5}
+            sx={{ mb: { xs: 1, md: 0 }, mr: { xs: 1, md: 0 } }}
+          >
             {coins ? (
               <Autocomplete
                 size="small"
@@ -94,7 +99,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                 id="combo-box-demo"
                 value={symbolValue}
                 options={coins}
-                sx={{ width: 300 }}
+                sx={{ width: { md: 300 } }}
                 onInputChange={(event, newValue) => {
                   setSymbolValue(newValue);
                   let symb = newValue ? `&theSymbol=${newValue}` : "";
@@ -121,12 +126,17 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                   }
                 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Symbol" />
+                  <TextField {...params} label="All" />
                 )}
               />
             ) : null}
           </Grid>
-          <Grid item xs={4} md={4}>
+          <Grid
+            item
+            md={2}
+            xs={5}
+            sx={{ mb: { xs: 1, md: 0 }, mr: { xs: 1, md: 0 } }}
+          >
             <DatePicker
               label="Choose a date"
               value={value}
@@ -164,7 +174,12 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                 setYear(calYear);
               }}
               renderInput={(params) => (
-                <TextField size="small" fontSize="small" {...params} />
+                <TextField
+                  size="small"
+                  fullWidth
+                  fontSize="small"
+                  {...params}
+                />
               )}
             />
           </Grid>
@@ -172,7 +187,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
       </Box>
       {data ? (
         <Grid container justifyContent="center" alignItems="center">
-          <Grid item xs={11}>
+          <Grid item md={11} xs={12}>
             <ToFromChart data={data} filterBy={filterBy} />
           </Grid>
           <Grid item xs={12}>
@@ -180,10 +195,10 @@ export const WhaleAlertCharts = ({ ...rest }) => {
               <Chip size="medium" label="Total and Difference" />
             </Divider>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} xs={12}>
             <TotalChart data={data} filterBy={filterBy} />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} xs={12}>
             <DifferenceChart data={data} filterBy={filterBy} />
           </Grid>
         </Grid>
