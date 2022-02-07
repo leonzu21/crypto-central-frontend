@@ -69,7 +69,7 @@ const DifferenceChart = ({ data, filterBy, ...rest }) => {
           <ReferenceLine y={0} stroke="#000" />
           <Bar dataKey="Difference" fill="#EF5350">
             {data.map((entry, index) => (
-              <Cell fill={entry["Difference"] < 0 ? "#EF5350" : "#4DB6AC"} />
+              <Cell key={index} fill={entry["Difference"] < 0 ? "#EF5350" : "#4DB6AC"} />
             ))}
           </Bar>
         </BarChart>
