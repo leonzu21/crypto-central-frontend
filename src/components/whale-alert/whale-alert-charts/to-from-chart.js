@@ -1,5 +1,7 @@
 import React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import useWindowDimensions from "src/hooks/useWindowDimensoins";
 
 import {
   BarChart,
@@ -34,13 +36,19 @@ const formatAxis = (tickItem, filterBy) => {
 };
 
 const ToFromChart = ({ data, filterBy, ...rest }) => {
+  const { height, width } = useWindowDimensions();
   const isDesktopFormat = useMediaQuery("(min-width:700px)");
+  const customWidth = isDesktopFormat
+    ? width
+    : width * 1.5;
 
   return (
-    <div style={{ width: "100%", height: 350 }}>
-      <ResponsiveContainer width="100%" height="100%">
+    <div>
+      <PerfectScrollbar>
         <BarChart
           data={data}
+          height={350}
+          width={customWidth}
           margin={{
             top: 5,
             right: 30,
@@ -67,14 +75,14 @@ const ToFromChart = ({ data, filterBy, ...rest }) => {
             formatter={(value) => new Intl.NumberFormat("en").format(value)}
           />
           <Legend />
-          {!isDesktopFormat ? (
-            <Brush dataKey="name" height={30} stroke="#8884d8" />
-          ) : null}
+          {/* {!isDesktopFormat ? (
+              <Brush dataKey="name" height={30} stroke="#8884d8" />
+            ) : null} */}
 
           <Bar dataKey="To Wallet" fill="#4DB6AC" />
           <Bar dataKey="From Wallet" fill="#EF5350" />
         </BarChart>
-      </ResponsiveContainer>
+      </PerfectScrollbar>
     </div>
   );
 };
