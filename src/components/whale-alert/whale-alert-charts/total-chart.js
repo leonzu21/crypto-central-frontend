@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { useContainerDimensions } from "src/hooks/useContainerDimensions";
 
 import {
   BarChart,
   Bar,
-  Brush,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
 
 import nFormatter from "src/utils/n-formatter";
@@ -34,13 +34,19 @@ const formatAxis = (tickItem, filterBy) => {
 };
 
 const TotalChart = ({ data, filterBy, ...rest }) => {
+  const componentRef = useRef();
+
+  const { width, height } = useContainerDimensions(componentRef);
   const isDesktopFormat = useMediaQuery("(min-width:700px)");
+  const customWidth = isDesktopFormat ? width : width * 1.5;
 
   return (
-    <div style={{ width: "100%", height: 350 }}>
-      <ResponsiveContainer width="100%" height="100%">
+    <div ref={componentRef}>
+      <PerfectScrollbar>
         <BarChart
           data={data}
+          height={350}
+          width={customWidth}
           margin={{
             top: 5,
             right: 30,
@@ -67,12 +73,9 @@ const TotalChart = ({ data, filterBy, ...rest }) => {
             formatter={(value) => new Intl.NumberFormat("en").format(value)}
           />
           <Legend />
-          {!isDesktopFormat ? (
-            <Brush dataKey="name" height={30} stroke="#8884d8" />
-          ) : null}
           <Bar dataKey="Total" fill="#4DB6AC" />
         </BarChart>
-      </ResponsiveContainer>
+      </PerfectScrollbar>
     </div>
   );
 };

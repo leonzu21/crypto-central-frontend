@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import useWindowDimensions from "src/hooks/useWindowDimensoins";
+import { useContainerDimensions } from "src/hooks/useContainerDimensions";
 
 import {
   BarChart,
   Bar,
-  Brush,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
 
 import useSWR from "swr";
@@ -36,14 +34,14 @@ const formatAxis = (tickItem, filterBy) => {
 };
 
 const ToFromChart = ({ data, filterBy, ...rest }) => {
-  const { height, width } = useWindowDimensions();
+  const componentRef = useRef();
+
+  const { width, height } = useContainerDimensions(componentRef);
   const isDesktopFormat = useMediaQuery("(min-width:700px)");
-  const customWidth = isDesktopFormat
-    ? width
-    : width * 1.5;
+  const customWidth = isDesktopFormat ? width : width * 1.5;
 
   return (
-    <div>
+    <div ref={componentRef}>
       <PerfectScrollbar>
         <BarChart
           data={data}
@@ -75,10 +73,6 @@ const ToFromChart = ({ data, filterBy, ...rest }) => {
             formatter={(value) => new Intl.NumberFormat("en").format(value)}
           />
           <Legend />
-          {/* {!isDesktopFormat ? (
-              <Brush dataKey="name" height={30} stroke="#8884d8" />
-            ) : null} */}
-
           <Bar dataKey="To Wallet" fill="#4DB6AC" />
           <Bar dataKey="From Wallet" fill="#EF5350" />
         </BarChart>
