@@ -55,7 +55,7 @@ export const CoinListResults = ({ ...rest }) => {
           <Table
             sx={{
               [`& .${tableCellClasses.root}`]: {
-                borderBottom: "1px inset gray",
+                borderBottom: "1px inset #E0E0E0",
               },
             }}
             size="small"
@@ -92,14 +92,23 @@ export const CoinListResults = ({ ...rest }) => {
                   </TableCell>
                   <TableCell>{coin.symbol}</TableCell>
                   <TableCell>${coin.current_price.toLocaleString()}</TableCell>
-                  <TableCell>
-                    {coin.price_change_percentage_1h_in_currency.toFixed(1)}
+                  <TableCell
+                  style={{
+                    color: coin.price_change_percentage_1h_in_currency < 0 ? "#D50000" : "#2E7D32",
+                  }}>
+                    {coin.price_change_percentage_1h_in_currency.toFixed(1)}%
                   </TableCell>
-                  <TableCell>
-                    {coin.price_change_percentage_24h.toFixed(1)}
+                  <TableCell
+                  style={{
+                    color: coin.price_change_percentage_24h < 0 ? "#D50000" : "#2E7D32",
+                  }}>
+                    {coin.price_change_percentage_24h.toFixed(1)}%
                   </TableCell>
-                  <TableCell>
-                    {coin.price_change_percentage_7d_in_currency.toFixed(1)}
+                  <TableCell
+                  style={{
+                    color: coin.price_change_percentage_7d_in_currency < 0 ? "#D50000" : "#2E7D32",
+                  }}>
+                    {coin.price_change_percentage_7d_in_currency.toFixed(1)}%
                   </TableCell>
                   <TableCell>${coin.total_volume.toLocaleString()}</TableCell>
                   <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
