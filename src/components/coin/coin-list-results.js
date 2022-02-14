@@ -17,7 +17,7 @@ import {
   Typography,
   TableContainer,
   Paper,
-  tableCellClasses
+  tableCellClasses,
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
 
@@ -49,75 +49,91 @@ export const CoinListResults = ({ ...rest }) => {
 
   console.log(coins);
   return (
-    <Card {...rest}>
-      <PerfectScrollbar>
-        <TableContainer component={Paper}>
-          <Table
-            sx={{
-              [`& .${tableCellClasses.root}`]: {
-                borderBottom: "1px inset #E0E0E0",
-              },
-            }}
-            size="small"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>#</TableCell>
-                <TableCell>Coin</TableCell>
-                <TableCell></TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>1h</TableCell>
-                <TableCell>24h</TableCell>
-                <TableCell>7d</TableCell>
-                <TableCell>24h Volume</TableCell>
-                <TableCell>Mkt Cap</TableCell>
+    <Card>
+      <TableContainer component={Paper}>
+        <Table
+          sx={{
+            [`& .${tableCellClasses.root}`]: {
+              borderBottom: "1px inset #E0E0E0",
+            },
+          }}
+          size="small"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>Coin</TableCell>
+              <TableCell></TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>1h</TableCell>
+              <TableCell>24h</TableCell>
+              <TableCell>7d</TableCell>
+              <TableCell>24h Volume</TableCell>
+              <TableCell>Mkt Cap</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {coins.slice(0, limit).map((coin) => (
+              <TableRow hover key={coin.id}>
+                <TableCell
+                >{coin.market_cap_rank}</TableCell>
+                <TableCell
+                style={{
+                  position: "sticky",
+                  left: 0,
+                  background: "white"
+                }}>
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      display: "flex",
+                    }}
+                  >
+                    <Avatar src={coin.image} sx={{ mr: 2 }} />
+                    <Typography color="textPrimary" variant="body1">
+                      {coin.name}
+                    </Typography>
+                  </Box>
+                </TableCell>
+                <TableCell>{coin.symbol}</TableCell>
+                <TableCell>${coin.current_price.toLocaleString()}</TableCell>
+                <TableCell
+                  style={{
+                    color:
+                      coin.price_change_percentage_1h_in_currency < 0
+                        ? "#D50000"
+                        : "#2E7D32",
+                  }}
+                >
+                  {coin.price_change_percentage_1h_in_currency.toFixed(1)}%
+                </TableCell>
+                <TableCell
+                  style={{
+                    color:
+                      coin.price_change_percentage_24h < 0
+                        ? "#D50000"
+                        : "#2E7D32",
+                  }}
+                >
+                  {coin.price_change_percentage_24h.toFixed(1)}%
+                </TableCell>
+                <TableCell
+                  style={{
+                    color:
+                      coin.price_change_percentage_7d_in_currency < 0
+                        ? "#D50000"
+                        : "#2E7D32",
+                  }}
+                >
+                  {coin.price_change_percentage_7d_in_currency.toFixed(1)}%
+                </TableCell>
+                <TableCell>${coin.total_volume.toLocaleString()}</TableCell>
+                <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {coins.slice(0, limit).map((coin) => (
-                <TableRow hover key={coin.id}>
-                  <TableCell>{coin.market_cap_rank}</TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        display: "flex",
-                      }}
-                    >
-                      <Avatar src={coin.image} sx={{ mr: 2 }} />
-                      <Typography color="textPrimary" variant="body1">
-                        {coin.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>{coin.symbol}</TableCell>
-                  <TableCell>${coin.current_price.toLocaleString()}</TableCell>
-                  <TableCell
-                  style={{
-                    color: coin.price_change_percentage_1h_in_currency < 0 ? "#D50000" : "#2E7D32",
-                  }}>
-                    {coin.price_change_percentage_1h_in_currency.toFixed(1)}%
-                  </TableCell>
-                  <TableCell
-                  style={{
-                    color: coin.price_change_percentage_24h < 0 ? "#D50000" : "#2E7D32",
-                  }}>
-                    {coin.price_change_percentage_24h.toFixed(1)}%
-                  </TableCell>
-                  <TableCell
-                  style={{
-                    color: coin.price_change_percentage_7d_in_currency < 0 ? "#D50000" : "#2E7D32",
-                  }}>
-                    {coin.price_change_percentage_7d_in_currency.toFixed(1)}%
-                  </TableCell>
-                  <TableCell>${coin.total_volume.toLocaleString()}</TableCell>
-                  <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </PerfectScrollbar>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <TablePagination
         component="div"
         count={1200}
