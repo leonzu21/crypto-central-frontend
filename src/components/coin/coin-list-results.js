@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { useState, useEffect } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import PropTypes from "prop-types";
+import { format } from "date-fns";
+import useSWRInfinite from "swr/infinite";
 import {
   Avatar,
   Box,
@@ -13,46 +14,19 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { getInitials } from '../../utils/get-initials';
+  Typography,
+  TableContainer,
+  Paper,
+  tableCellClasses
+} from "@mui/material";
+import { getInitials } from "../../utils/get-initials";
 
-export const CoinListResults = ({ coins, ...rest }) => {
-  const [selectedCoinIds, setSelectedCoinIds] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  const handleSelectAll = (event) => {
-    let newSelectedCoinIds;
-
-    if (event.target.checked) {
-      newSelectedCoinIds = coins.map((coin) => coin.id);
-    } else {
-      newSelectedCoinIds = [];
-    }
-
-    setSelectedCoinIds(newSelectedCoinIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCoinIds.indexOf(id);
-    let newSelectedCoinIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedCoinIds = newSelectedCoinIds.concat(selectedCoinIds, id);
-    } else if (selectedIndex === 0) {
-      newSelectedCoinIds = newSelectedCoinIds.concat(selectedCoinIds.slice(1));
-    } else if (selectedIndex === selectedCoinIds.length - 1) {
-      newSelectedCoinIds = newSelectedCoinIds.concat(selectedCoinIds.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedCoinIds = newSelectedCoinIds.concat(
-        selectedCoinIds.slice(0, selectedIndex),
-        selectedCoinIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedCoinIds(newSelectedCoinIds);
-  };
+export const CoinListResults = ({ ...rest }) => {
+  const [limit, setLimit] = useState(25);
+  const [page, setPage] = useState(1);
+  const [noOfCoins, setNoOfCoins] = useState(0);
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -62,107 +36,88 @@ export const CoinListResults = ({ coins, ...rest }) => {
     setPage(newPage);
   };
 
+  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
+    (index) =>
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=${page}&sparkline=false&price_change_percentage=1h,24,7d
+      `,
+    fetcher
+  );
+
+  if (!data) return "Loading...";
+  // const transactions = data ? [].concat(...data) : [];
+  const coins = data[0];
+
+  console.log(coins);
   return (
     <Card {...rest}>
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
-          <Table>
+        <TableContainer component={Paper}>
+          <Table
+            sx={{
+              [`& .${tableCellClasses.root}`]: {
+                borderBottom: "1px inset gray",
+              },
+            }}
+            size="small"
+          >
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCoinIds.length === coins.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCoinIds.length > 0
-                      && selectedCoinIds.length < coins.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
-                <TableCell>
-                  Name
-                </TableCell>
-                <TableCell>
-                  Symbol
-                </TableCell>
-                <TableCell>
-                  Contract
-                </TableCell>
-                <TableCell>
-                  $ Value
-                </TableCell>
-                {/* <TableCell>
-                  Registration date
-                </TableCell> */}
+                <TableCell>#</TableCell>
+                <TableCell>Coin</TableCell>
+                <TableCell></TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>1h</TableCell>
+                <TableCell>24h</TableCell>
+                <TableCell>7d</TableCell>
+                <TableCell>24h Volume</TableCell>
+                <TableCell>Mkt Cap</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {coins.slice(0, limit).map((coin) => (
-                <TableRow
-                  hover
-                  key={coin.id}
-                  selected={selectedCoinIds.indexOf(coin.id) !== -1}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCoinIds.indexOf(coin.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, coin.id)}
-                      value="true"
-                    />
-                  </TableCell>
+                <TableRow hover key={coin.id}>
+                  <TableCell>{coin.market_cap_rank}</TableCell>
                   <TableCell>
                     <Box
                       sx={{
-                        alignItems: 'center',
-                        display: 'flex'
+                        alignItems: "center",
+                        display: "flex",
                       }}
                     >
-                      <Avatar
-                        src={coin.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(coin.name)}
-                      </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
+                      <Avatar src={coin.image} sx={{ mr: 2 }} />
+                      <Typography color="textPrimary" variant="body1">
                         {coin.name}
                       </Typography>
                     </Box>
                   </TableCell>
+                  <TableCell>{coin.symbol}</TableCell>
+                  <TableCell>${coin.current_price.toLocaleString()}</TableCell>
                   <TableCell>
-                    {coin.symbol}
+                    {coin.price_change_percentage_1h_in_currency.toFixed(1)}
                   </TableCell>
                   <TableCell>
-                    {coin.contract}
+                    {coin.price_change_percentage_24h.toFixed(1)}
                   </TableCell>
                   <TableCell>
-                    {coin.value}
+                    {coin.price_change_percentage_7d_in_currency.toFixed(1)}
                   </TableCell>
-                  {/* <TableCell>
-                    {format(coin.createdAt, 'dd/MM/yyyy')}
-                  </TableCell> */}
+                  <TableCell>${coin.total_volume.toLocaleString()}</TableCell>
+                  <TableCell>${coin.market_cap.toLocaleString()}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </Box>
+        </TableContainer>
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={coins.length}
+        count={1200}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[25, 50, 100]}
       />
     </Card>
   );
-};
-
-CoinListResults.propTypes = {
-  coins: PropTypes.array.isRequired
 };

@@ -8,8 +8,6 @@ import {
   SvgIcon, Typography
 } from '@mui/material';
 import { Search as SearchIcon } from '../../icons/search';
-import { Upload as UploadIcon } from '../../icons/upload';
-import { Download as DownloadIcon } from '../../icons/download';
 
 export const CoinListToolbar = (props) => (
   <Box {...props}>
@@ -28,28 +26,8 @@ export const CoinListToolbar = (props) => (
       >
         Coins
       </Typography>
-      <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<UploadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Import
-        </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Export
-        </Button>
-        <Button
-          color="primary"
-          variant="contained"
-        >
-          Add Coins
-        </Button>
-      </Box>
     </Box>
-    <Box sx={{ mt: 3 }}>
+    {/* <Box sx={{ mt: 3 }}>
       <Card>
         <CardContent>
           <Box sx={{ maxWidth: 500 }}>
@@ -73,6 +51,6 @@ export const CoinListToolbar = (props) => (
           </Box>
         </CardContent>
       </Card>
-    </Box>
+    </Box> */}
   </Box>
 );
