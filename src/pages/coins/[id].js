@@ -5,18 +5,23 @@ import { CoinListResults } from "../../components/coin/coin-list-results";
 import { CoinListToolbar } from "../../components/coin/coin-list-toolbar";
 import { CoinDetails } from "../../components/coin/coin-details";
 import { CoinHistoricalChart } from "src/components/coin/coin-historical-chart";
+import { useRouter } from "next/router";
 
 export const getStaticPaths = async () => {
-  const res = await fetch(`https://api.coingecko.com/api/v3/coins/list`);
+  const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1`);
   const data = await res.json();
 
   const paths = data.map((coin) => {
-    return {
-      params: { id: coin.id.toString() },
+    if (coin.id.toString() != "")
+      return {
+        params: { id: coin.id.toString() },
+      };
+    else return {
+      params: { id: 'bitcoin' },
     };
   });
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
 export const getStaticProps = async (context) => {
@@ -30,7 +35,11 @@ export const getStaticProps = async (context) => {
 };
 
 const Coin = ({ coin }) => {
-  console.log(coin);
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <h4>Loading...</h4>;
+  }
   return (
     <>
       <Head>
