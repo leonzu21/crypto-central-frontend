@@ -3,6 +3,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 import useSWRInfinite from "swr/infinite";
+import Link from "next/link";
 import {
   Avatar,
   Box,
@@ -38,7 +39,7 @@ export const CoinListResults = ({ ...rest }) => {
 
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
     (index) =>
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=${page}&sparkline=false&price_change_percentage=1h,24,7d
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=${page}&sparkline=true&price_change_percentage=1h,24,7d
       `,
     fetcher
   );
@@ -75,14 +76,15 @@ export const CoinListResults = ({ ...rest }) => {
           <TableBody>
             {coins.slice(0, limit).map((coin) => (
               <TableRow hover key={coin.id}>
+                <TableCell>{coin.market_cap_rank}</TableCell>
+
                 <TableCell
-                >{coin.market_cap_rank}</TableCell>
-                <TableCell
-                style={{
-                  position: "sticky",
-                  left: 0,
-                  background: "white"
-                }}>
+                  style={{
+                    position: "sticky",
+                    left: 0,
+                    background: "white",
+                  }}
+                >
                   <Box
                     sx={{
                       alignItems: "center",
@@ -90,11 +92,16 @@ export const CoinListResults = ({ ...rest }) => {
                     }}
                   >
                     <Avatar src={coin.image} sx={{ mr: 2 }} />
-                    <Typography color="textPrimary" variant="body1">
-                      {coin.name}
-                    </Typography>
+                    <Link href={`/coins/${coin.id}`}>
+                      <a>
+                        <Typography color="textPrimary" variant="body1">
+                          {coin.name}
+                        </Typography>
+                      </a>
+                    </Link>
                   </Box>
                 </TableCell>
+
                 <TableCell>{coin.symbol}</TableCell>
                 <TableCell>${coin.current_price.toLocaleString()}</TableCell>
                 <TableCell
