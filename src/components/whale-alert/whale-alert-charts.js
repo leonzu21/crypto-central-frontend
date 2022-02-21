@@ -56,7 +56,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
     <Card {...rest}>
       <Box sx={{ m: 1 }}>
         <Grid container>
-          <Grid item md={4} xs={12} sx={{ mb: { xs: 1 } }}>
+          <Grid item md={4} xs={8} sx={{ mb: { xs: 1 } }}>
             <ButtonGroup size="small" color="primary" aria-label="small group">
               <Button
                 onClick={() => {
@@ -86,57 +86,7 @@ export const WhaleAlertCharts = ({ ...rest }) => {
               </Button>
             </ButtonGroup>
           </Grid>
-          <Grid
-            item
-            md={4}
-            xs={5}
-            sx={{ mb: { xs: 1, md: 0 }, mr: { xs: 1, md: 0 } }}
-          >
-            {coins ? (
-              <Autocomplete
-                size="small"
-                disablePortal
-                id="combo-box-demo"
-                value={symbolValue}
-                options={coins}
-                sx={{ width: { md: 300 } }}
-                onInputChange={(event, newValue) => {
-                  setSymbolValue(newValue);
-                  let symb = newValue ? `&theSymbol=${newValue}` : "";
-                  setSymbol(symb);
-                  switch (filterBy) {
-                    case "dai":
-                      setEndpoint(
-                        `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
-                      );
-                      break;
-                    case "month":
-                      setEndpoint(
-                        `${filterBy}lyChart?theDate=${year}-${month}${symb}`
-                      );
-                      break;
-                    case "year":
-                      setEndpoint(`${filterBy}lyChart?theDate=${year}${symb}`);
-                      break;
-                    default:
-                      setEndpoint(
-                        `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
-                      );
-                      break;
-                  }
-                }}
-                renderInput={(params) => (
-                  <TextField {...params} label="All" />
-                )}
-              />
-            ) : null}
-          </Grid>
-          <Grid
-            item
-            md={2}
-            xs={5}
-            sx={{ mb: { xs: 1, md: 0 }, mr: { xs: 1, md: 0 } }}
-          >
+          <Grid item md={4} xs={4}>
             <DatePicker
               label="Choose a date"
               value={value}
@@ -178,10 +128,49 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                   size="small"
                   fullWidth
                   fontSize="small"
+                  sx={{ width: { md: 300 } }}
                   {...params}
                 />
               )}
             />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            {coins ? (
+              <Autocomplete
+                size="small"
+                disablePortal
+                id="combo-box-demo"
+                value={symbolValue}
+                options={coins}
+                sx={{ width: { md: 300 } }}
+                onInputChange={(event, newValue) => {
+                  setSymbolValue(newValue);
+                  let symb = newValue ? `&theSymbol=${newValue}` : "";
+                  setSymbol(symb);
+                  switch (filterBy) {
+                    case "dai":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
+                      );
+                      break;
+                    case "month":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${year}-${month}${symb}`
+                      );
+                      break;
+                    case "year":
+                      setEndpoint(`${filterBy}lyChart?theDate=${year}${symb}`);
+                      break;
+                    default:
+                      setEndpoint(
+                        `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
+                      );
+                      break;
+                  }
+                }}
+                renderInput={(params) => <TextField {...params} label="All" />}
+              />
+            ) : null}
           </Grid>
         </Grid>
       </Box>
