@@ -6,40 +6,33 @@ import { CoinListToolbar } from "../../components/coin/coin-list-toolbar";
 import { CoinDetails } from "../../components/coin/coin-details";
 import { CoinHistoricalChart } from "src/components/coin/coin-historical-chart";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
-export const getStaticPaths = async () => {
-  const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1`);
-  const data = await res.json();
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  const paths = data.map((coin) => {
-    if (coin.id.toString() != "")
-      return {
-        params: { id: coin.id.toString() },
-      };
-    else return {
-      params: { id: 'bitcoin' },
-    };
-  });
+// export const getStaticProps = async (context) => {
+//   const id = context.params.id;
+//   const res = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
+//   const data = await res.json();
 
-  return { paths, fallback: true };
-};
+//   return {
+//     props: { coin: data },
+//   };
+// };
 
-export const getStaticProps = async (context) => {
-  const id = context.params.id;
-  const res = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
-  const data = await res.json();
-
-  return {
-    props: { coin: data },
-  };
-};
-
-const Coin = ({ coin }) => {
+const Coin = () => {
   const router = useRouter();
 
-  if (router.isFallback) {
-    return <h4>Loading...</h4>;
-  }
+  const coinId = router.query.id;
+
+  const { data, error } = useSWR(
+    coinId ? `https://api.coingecko.com/api/v3/coins/${coinId}` : null,
+    fetcher
+  );
+  const coin = null;
+  if (!data) return "Loading...";
+
+  coin = data;
   return (
     <>
       <Head>
