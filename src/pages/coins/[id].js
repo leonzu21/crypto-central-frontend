@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Divider, Chip } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { CoinListResults } from "../../components/coin/coin-list-results";
 import { CoinListToolbar } from "../../components/coin/coin-list-toolbar";
@@ -7,6 +7,8 @@ import { CoinDetails } from "../../components/coin/coin-details";
 import { CoinHistoricalChart } from "src/components/coin/coin-historical-chart";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { WhaleAlertCharts } from "src/components/whale-alert/whale-alert-charts";
+import { WhaleAlertListResults } from "src/components/whale-alert/whale-alert-list-results";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -30,13 +32,11 @@ const Coin = () => {
     fetcher
   );
   const coin = null;
-  if (!data) return "Loading...";
-
-  coin = data;
+  if (data) coin = data;
   return (
     <>
       <Head>
-        <title>{coin.name} | Crypto Central</title>
+        <title>{coin ? `${coin.name}` : null} | Crypto Central</title>
       </Head>
       <Box
         component="main"
@@ -53,18 +53,18 @@ const Coin = () => {
                 sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
                 item
                 xs={12}
-                md={7}
+                md={12}
               >
                 <CoinDetails coin={coin} />
               </Grid>
-              <Grid
+              {/* <Grid
                 sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
                 item
                 xs={12}
                 md={4}
               >
                 <CoinDetails coin={coin} />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
           <Box>
@@ -73,20 +73,26 @@ const Coin = () => {
                 sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
                 item
                 xs={12}
-                md={7}
+                md={12}
               >
-                <CoinHistoricalChart coin={coin} />
+                {coin ? <CoinHistoricalChart coin={coin} /> : null}
               </Grid>
-              {/* <Grid
-                sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
-                item
-                xs={12}
-                md={4}
-              >
-                <CoinHistoricalChart coin={coin} />
-              </Grid> */}
             </Grid>
           </Box>
+          <Grid
+            sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
+            item
+            xs={12}
+          >
+            {coin ? <WhaleAlertCharts propSymbol={coin.symbol} /> : null}
+          </Grid>
+          <Grid
+            sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
+            item
+            xs={12}
+          >
+            {coin ? <WhaleAlertListResults propSymbol={coin.symbol} /> : null}
+          </Grid>
         </Container>
       </Box>
     </>
