@@ -38,11 +38,20 @@ const WhaleAlerts = () => {
           <WhaleAlertListToolbar />
 
           <Box sx={{ mt: 3 }}>
-            <WhaleAlertCharts />
-            <Divider size="medium" sx={{ m: 2 }}>
-              <Chip size="medium" label="Biggest Transactions" />
-            </Divider>
-            <WhaleAlertListResults />
+            <Grid
+              sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
+              item
+              xs={12}
+            >
+              <WhaleAlertCharts />
+            </Grid>
+            <Grid
+              sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
+              item
+              xs={12}
+            >
+              <WhaleAlertListResults />
+            </Grid>
           </Box>
         </Container>
       </Box>
