@@ -14,6 +14,7 @@ import moment from "moment";
 import nFormatter from "src/utils/n-formatter";
 import DatePicker from "@mui/lab/DatePicker";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { ChartLoadingSpinner } from "../../utils/chart-loading-spinner";
 
 import {
   LineChart,
@@ -83,6 +84,8 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
     `https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart/range?vs_currency=usd&from=${from}&to=${to}`,
     fetcher
   );
+  let chartDisplay = <ChartLoadingSpinner />;
+
   let prices = null;
   if (data) {
     prices = data.prices.map((item, index) => {
@@ -92,7 +95,76 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
       };
       return keyValue;
     });
-  } else return "Loading...";
+
+    chartDisplay = (
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          data={prices}
+          margin={{
+            top: 5,
+            right: 25,
+            left: 25,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <XAxis
+            axisLine={false}
+            dataKey="timestamp"
+            ticks={[
+              prices[0].timestamp,
+              prices[Math.round(prices.length / 6)].timestamp,
+              prices[Math.round(prices.length / 3)].timestamp,
+              prices[Math.round(prices.length / 2)].timestamp,
+              prices[Math.round((2 * prices.length) / 3)].timestamp,
+              prices[Math.round((5 * prices.length) / 6)].timestamp,
+              prices[prices.length - 1].timestamp,
+            ]}
+            tickFormatter={(date) => {
+              const timestamp = moment(date, "DD-MM-yyyy HH:mm:ss").valueOf();
+              return moment(timestamp).format("HH:00 Do");
+            }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            mirror
+            type="number"
+            allowDuplicatedCategory={false}
+            domain={[
+              (dataMin) =>
+                dataMin != 0 ? Math.abs(dataMin) - Math.abs(dataMin) / 100 : 0,
+              (dataMax) =>
+                dataMax != 0 ? Math.abs(dataMax) + Math.abs(dataMax) / 100 : 0,
+            ]}
+            tickCount={10}
+            tickFormatter={(value) =>
+              value > 30
+                ? new Intl.NumberFormat("en-us", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(Math.round(value))
+                : new Intl.NumberFormat("en-us", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(value)
+            }
+          />
+
+          <Tooltip
+            formatter={(value) =>
+              new Intl.NumberFormat("en-us", {
+                style: "currency",
+                currency: "USD",
+              }).format(value)
+            }
+          />
+          <Legend />
+          <Line type="monotone" dataKey="Price" stroke="#4DB6AC" dot={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }
 
   console.log(prices);
 
@@ -219,83 +291,7 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
           </Box>
         </Grid>
       </Grid>
-      <div style={{ width: "100%", height: 500 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={prices}
-            margin={{
-              top: 5,
-              right: 25,
-              left: 25,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
-            <XAxis
-              axisLine={false}
-              dataKey="timestamp"
-              ticks={[
-                prices[0].timestamp,
-                prices[Math.round(prices.length / 6)].timestamp,
-                prices[Math.round(prices.length / 3)].timestamp,
-                prices[Math.round(prices.length / 2)].timestamp,
-                prices[Math.round((2 * prices.length) / 3)].timestamp,
-                prices[Math.round((5 * prices.length) / 6)].timestamp,
-                prices[prices.length - 1].timestamp,
-              ]}
-              tickFormatter={(date) => {
-                const timestamp = moment(date, "DD-MM-yyyy HH:mm:ss").valueOf();
-                return moment(timestamp).format("HH:00 Do");
-              }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              mirror
-              type="number"
-              allowDuplicatedCategory={false}
-              domain={[
-                (dataMin) =>
-                  dataMin != 0
-                    ? Math.abs(dataMin) - Math.abs(dataMin) / 100
-                    : 0,
-                (dataMax) =>
-                  dataMax != 0
-                    ? Math.abs(dataMax) + Math.abs(dataMax) / 100
-                    : 0,
-              ]}
-              tickCount={10}
-              tickFormatter={(value) =>
-                value > 30
-                  ? new Intl.NumberFormat("en-us", {
-                      style: "currency",
-                      currency: "USD",
-                    }).format(Math.round(value))
-                  : new Intl.NumberFormat("en-us", {
-                      style: "currency",
-                      currency: "USD",
-                    }).format(value)
-              }
-            />
-
-            <Tooltip
-              formatter={(value) =>
-                new Intl.NumberFormat("en-us", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(value)
-              }
-            />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="Price"
-              stroke="#4DB6AC"
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <div style={{ width: "100%", height: 500 }}>{chartDisplay}</div>
     </Card>
   );
 };

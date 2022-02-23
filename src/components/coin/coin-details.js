@@ -6,12 +6,16 @@ import {
   CardHeader,
   Divider,
   Grid,
+  Skeleton,
 } from "@mui/material";
 
+import LinearProgress from "@mui/material/LinearProgress";
+
 export const CoinDetails = ({ coin, ...rest }) => {
-  return (
-    <>
-      <Card>
+  let coinDetailsDisplay = <LinearProgress />;
+  if (coin) {
+    coinDetailsDisplay = (
+      <>
         <Box
           sx={{
             alignItems: "center",
@@ -123,7 +127,13 @@ export const CoinDetails = ({ coin, ...rest }) => {
             </Box>
           </Grid>
         </Grid>
-      </Card>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Card>{coinDetailsDisplay}</Card>
     </>
   );
 };
