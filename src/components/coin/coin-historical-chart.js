@@ -166,7 +166,6 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
     );
   }
 
-  console.log(prices);
 
   return (
     <Card>

@@ -48,7 +48,6 @@ export const CoinListResults = ({ ...rest }) => {
   // const transactions = data ? [].concat(...data) : [];
   const coins = data[0];
 
-  console.log(coins);
   return (
     <Card>
       <TableContainer component={Paper}>
