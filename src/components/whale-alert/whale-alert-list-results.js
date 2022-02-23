@@ -35,7 +35,9 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("Day");
   const [symbol, setSymbol] = useState(propSymbol ? propSymbol : "");
-  const [symbolValue, setSymbolValue] = useState(propSymbol ? propSymbol : null);
+  const [symbolValue, setSymbolValue] = useState(
+    propSymbol ? propSymbol : null
+  );
   const [bySymbol, setBySymbol] = useState(propSymbol ? "BySymbol" : "");
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
@@ -51,7 +53,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
 
   useEffect(() => {
     const currentDate = GetCurrentDate();
-    console.log(`[useEffect] -----> ${day}`);
     if (!day) {
       setDate(currentDate["currDate"]);
       setDay(currentDate["day"]);
@@ -79,10 +80,8 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     fetcher
   );
   if (!data) return "Loading...";
-  console.log(data);
   // const transactions = data ? [].concat(...data) : [];
   const transactions = data;
-  // console.log(transactions);
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
@@ -163,7 +162,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
                 calMonth = calMonth < 10 ? `0${calMonth}` : `${calMonth}`;
                 let calYear = newValue.getFullYear();
                 setValue(newValue);
-                console.log(symbol);
                 switch (filterBy) {
                   case "Day":
                     setEndpoint(
@@ -186,7 +184,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
                     );
                     break;
                 }
-                console.log(endpoint);
                 calDay = calDay < 10 ? `0${calDay}` : `${calDay}`;
                 setDay(calDay);
                 setMonth(calMonth);
@@ -205,6 +202,7 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
           <Grid item md={4} xs={12}>
             {coins ? (
               <Autocomplete
+                isOptionEqualToValue={(option, value) => option.label === value}
                 size="small"
                 disablePortal
                 id="combo-box-demo"
@@ -220,27 +218,26 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
                   switch (filterBy) {
                     case "Day":
                       setEndpoint(
-                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
                       );
                       break;
                     case "Month":
                       setEndpoint(
-                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
                       );
                       break;
                     case "Year":
                       setEndpoint(
-                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
                       );
                       break;
                     default:
                       setEndpoint(
-                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
                       );
                       break;
                   }
 
-                  console.log(endpoint);
                 }}
                 renderInput={(params) => <TextField {...params} label="All" />}
               />
