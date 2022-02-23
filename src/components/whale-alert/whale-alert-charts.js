@@ -6,13 +6,14 @@ import useSWR from "swr";
 import {
   Box,
   Card,
-  Button,
-  ButtonGroup,
+  ToggleButton,
+  ToggleButtonGroup,
   TextField,
   Grid,
   Divider,
   Chip,
   Autocomplete,
+  CardHeader,
 } from "@mui/material";
 
 import ToFromChart from "./whale-alert-charts/to-from-chart";
@@ -21,23 +22,24 @@ import DifferenceChart from "./whale-alert-charts/difference-chart";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const updateUrl = () => {
-  setEndpoint(``);
-};
-
-export const WhaleAlertCharts = ({ ...rest }) => {
+export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
   const currDate = GetCurrentDate();
   const [day, setDay] = useState(currDate["day"]);
   const [month, setMonth] = useState(currDate["month"]);
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("dai");
-  const [symbol, setSymbol] = useState("");
-  const [symbolValue, setSymbolValue] = useState(null);
+  const [symbol, setSymbol] = useState(propSymbol ? propSymbol : "");
+  const [symbolValue, setSymbolValue] = useState(propSymbol ? propSymbol : null);
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
     `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
   );
+  const [alignment, setAlignment] = useState("24h");
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
 
   // 3. Create out useEffect function
   useEffect(() => {
@@ -54,11 +56,20 @@ export const WhaleAlertCharts = ({ ...rest }) => {
 
   return (
     <Card {...rest}>
+      <CardHeader title="Whale Alerts Chart" />
       <Box sx={{ m: 1 }}>
         <Grid container>
           <Grid item md={4} xs={8} sx={{ mb: { xs: 1 } }}>
-            <ButtonGroup size="small" color="primary" aria-label="small group">
-              <Button
+            <ToggleButtonGroup
+              size="small"
+              value={alignment}
+              exclusive
+              onChange={handleAlignment}
+              aria-label="text alignment"
+            >
+              <ToggleButton
+                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                value="24h"
                 onClick={() => {
                   setFilterBy("dai");
                   setEndpoint(
@@ -66,25 +77,29 @@ export const WhaleAlertCharts = ({ ...rest }) => {
                   );
                 }}
               >
-                1 Day
-              </Button>
-              <Button
+                24h
+              </ToggleButton>
+              <ToggleButton
+                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                value="30d"
                 onClick={() => {
                   setFilterBy("month");
                   setEndpoint(`monthlyChart?theDate=${year}-${month}${symbol}`);
                 }}
               >
-                1 Month
-              </Button>
-              <Button
+                30d
+              </ToggleButton>
+              <ToggleButton
+                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                value="1y"
                 onClick={() => {
                   setFilterBy("year");
                   setEndpoint(`yearlyChart?theDate=${year}${symbol}`);
                 }}
               >
-                1 Year
-              </Button>
-            </ButtonGroup>
+                1y
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Grid>
           <Grid item md={4} xs={4}>
             <DatePicker
