@@ -30,7 +30,9 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("dai");
   const [symbol, setSymbol] = useState(propSymbol ? propSymbol : "");
-  const [symbolValue, setSymbolValue] = useState(propSymbol ? propSymbol : null);
+  const [symbolValue, setSymbolValue] = useState(
+    propSymbol ? propSymbol : null
+  );
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
     `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
@@ -152,6 +154,7 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
           <Grid item md={4} xs={12}>
             {coins ? (
               <Autocomplete
+                isOptionEqualToValue={(option, value) => option.label === value}
                 size="small"
                 disablePortal
                 id="combo-box-demo"
