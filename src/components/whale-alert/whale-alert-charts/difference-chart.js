@@ -71,11 +71,11 @@ const DifferenceChart = ({ data, filterBy, ...rest }) => {
             mirror
             axisLine={false}
             tickFormatter={(tick) => {
-              return nFormatter(tick);
+              return `$${nFormatter(tick)}`;
             }}
           />
           <Tooltip
-            formatter={(value) => new Intl.NumberFormat("en").format(value)}
+            formatter={(value) => `$${new Intl.NumberFormat("en").format(value)}`}
           />
 
           <Legend />
