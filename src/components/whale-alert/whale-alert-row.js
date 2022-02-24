@@ -32,7 +32,7 @@ const WhaleAlertRow = ({ transaction, ...rest }) => {
         {transaction.toOwner ? transaction.toOwner : "wallet"}
       </TableCell>
       <TableCell>{transaction.amount.toLocaleString()}</TableCell>
-      <TableCell>{transaction.amountUsd.toLocaleString()}</TableCell>
+      <TableCell>{`$${transaction.amountUsd.toLocaleString()}`}</TableCell>
     </TableRow>
   );
 };
