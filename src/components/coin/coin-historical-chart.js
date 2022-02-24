@@ -32,7 +32,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const CoinHistoricalChart = ({ coin, ...rest }) => {
   const currDate = parseInt(
-    (new Date(GetCurrentDate()["currDate"]).getTime() / 1000).toFixed(0)
+    (new Date(GetCurrentDate()["fullDate"]).getTime() / 1000).toFixed(0)
   );
 
   const [alignment, setAlignment] = useState("24h");
@@ -44,11 +44,17 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
   const [from, setFrom] = useState(currDate - 86401);
   const [to, setTo] = useState(currDate);
   const [valueFrom, setValueFrom] = useState(new Date(Date.now() - 86400000));
-  const [valueTo, setValueTo] = useState(Date());
+  const [valueTo, setValueTo] = useState(new Date());
+  const [toMinDate, setToMinDate] = useState(new Date());
+  const [toMaxDate, setToMaxDate] = useState(new Date());
+  const [fromMinDate, setFromMinDate] = useState(null);
+  const [fromMaxDate, setFromMaxDate] = useState(
+    new Date(Date.now() - 86400000)
+  );
 
   const setTimePeriod = (period) => {
     const currDate = parseInt(
-      (new Date(GetCurrentDate()["currDate"]).getTime() / 1000).toFixed(0)
+      (new Date(GetCurrentDate()["fullDate"]).getTime() / 1000).toFixed(0)
     );
 
     setTo(currDate);
@@ -166,7 +172,6 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
     );
   }
 
-
   return (
     <Card>
       <CardHeader
@@ -244,10 +249,13 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
         <Grid item xs={12} sx={{ mr: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "end", m: 1 }}>
             <DatePicker
+              minDate={fromMinDate}
+              maxDate={fromMaxDate}
               value={valueFrom}
               onChange={(newValue) => {
                 setValueFrom(newValue);
                 setFrom(Math.floor(newValue.getTime() / 1000));
+                setToMinDate(new Date(newValue.getTime() + 86400000))
               }}
               renderInput={(params) => (
                 <TextField
@@ -272,10 +280,13 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
               <ArrowForwardIcon fontSize="25%" />
             </Typography>
             <DatePicker
+              minDate={toMinDate}
+              maxDate={toMaxDate}
               value={valueTo}
               onChange={(newValue) => {
                 setValueTo(newValue);
                 setTo(Math.floor(newValue.getTime() / 1000));
+                setFromMaxDate(new Date(newValue.getTime() - 86400000))
               }}
               renderInput={(params) => (
                 <TextField
