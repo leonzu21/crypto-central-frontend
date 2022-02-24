@@ -254,7 +254,8 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
               value={valueFrom}
               onChange={(newValue) => {
                 setValueFrom(newValue);
-                setFrom(Math.floor(newValue.getTime() / 1000));
+                const afterMidnight = new Date(newValue.setHours(0, 1, 0, 0)).getTime();
+                setFrom(Math.floor(afterMidnight / 1000));
                 setToMinDate(new Date(newValue.getTime() + 86400000))
               }}
               renderInput={(params) => (
@@ -285,7 +286,8 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
               value={valueTo}
               onChange={(newValue) => {
                 setValueTo(newValue);
-                setTo(Math.floor(newValue.getTime() / 1000));
+                const beforeMidnight = new Date(newValue.setHours(23, 59, 0, 0)).getTime() - 86400000;
+                setTo(Math.floor(beforeMidnight / 1000));
                 setFromMaxDate(new Date(newValue.getTime() - 86400000))
               }}
               renderInput={(params) => (
