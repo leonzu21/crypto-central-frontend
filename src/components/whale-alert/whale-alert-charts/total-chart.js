@@ -61,6 +61,7 @@ const TotalChart = ({ data, filterBy, ...rest }) => {
         >
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
+            axisLine={false}
             dataKey="Timestamp"
             tickFormatter={(tick) => formatAxis(tick, filterBy)}
           />

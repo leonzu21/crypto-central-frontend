@@ -194,7 +194,7 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
       </Box>
       {data ? (
         <Grid container justifyContent="center" alignItems="center">
-          <Grid item md={11} xs={12}>
+          <Grid item md={12} xs={12}>
             <ToFromChart data={data} filterBy={filterBy} />
           </Grid>
           <Grid item xs={12}>

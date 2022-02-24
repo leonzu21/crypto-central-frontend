@@ -49,7 +49,7 @@ const ToFromChart = ({ data, filterBy, ...rest }) => {
           width={customWidth}
           margin={{
             top: 5,
-            right: 30,
+            right: 20,
             left: 20,
             bottom: 5,
           }}
@@ -61,6 +61,8 @@ const ToFromChart = ({ data, filterBy, ...rest }) => {
         >
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
+            axisLine={false}
+
             dataKey="Timestamp"
             tickFormatter={(tick) => formatAxis(tick, filterBy)}
           />
