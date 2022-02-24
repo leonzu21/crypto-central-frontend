@@ -59,12 +59,14 @@ const ToFromChart = ({ data, filterBy, ...rest }) => {
             offset: -20,
           }}
         >
-          <CartesianGrid strokeDasharray="4 4" />
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="Timestamp"
             tickFormatter={(tick) => formatAxis(tick, filterBy)}
           />
           <YAxis
+            mirror
+            axisLine={false}
             tickFormatter={(tick) => {
               return nFormatter(tick);
             }}
