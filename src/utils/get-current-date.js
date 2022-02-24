@@ -5,6 +5,7 @@ export const GetCurrentDate = (separator = "-") => {
     let year = newDate.getFullYear();
   
     return {
+      fullDate: newDate,
       currDate: `${year}${separator}${
         month < 10 ? `0${month}` : `${month}`
       }${separator}${date < 10 ? `0${date}` : `${date}`}`,
