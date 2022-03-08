@@ -13,6 +13,9 @@ import {
   Legend,
   ReferenceLine,
   Cell,
+  Typography,
+  withStyles,
+  makeStyles,
 } from "recharts";
 
 import nFormatter from "src/utils/n-formatter";
@@ -75,10 +78,25 @@ const DifferenceChart = ({ data, filterBy, ...rest }) => {
             }}
           />
           <Tooltip
-            formatter={(value) => `$${new Intl.NumberFormat("en").format(value)}`}
+            formatter={(value) =>
+              `$${new Intl.NumberFormat("en").format(value)}`
+            }
           />
 
-          <Legend />
+          <Legend
+            formatter={(value) => (
+              <span
+                style={{
+                  background:
+                    "-webkit-linear-gradient(45deg, #EF5350 45%, #4DB6AC 55%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                {value}
+              </span>
+            )}
+          />
           <ReferenceLine y={0} stroke="#000" />
           <Bar dataKey="Difference" fill="#EF5350">
             {data.map((entry, index) => (
