@@ -33,7 +33,7 @@ const formatAxis = (tickItem, filterBy) => {
   return moment(tickItem).format(format);
 };
 
-const TotalChart = ({ data, filterBy, ...rest }) => {
+const TotalChart = ({ data, filterBy, symbol, ...rest }) => {
   const componentRef = useRef();
 
   const { width, height } = useContainerDimensions(componentRef);
@@ -69,7 +69,7 @@ const TotalChart = ({ data, filterBy, ...rest }) => {
             mirror
             axisLine={false}
             tickFormatter={(tick) => {
-              return `$${nFormatter(tick)}`;
+              return symbol ? `${nFormatter(tick)}` : `$${nFormatter(tick)}`;
             }}
           />
           <Tooltip
