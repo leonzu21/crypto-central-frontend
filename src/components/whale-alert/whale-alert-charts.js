@@ -285,7 +285,7 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
             />
           </Grid>
           <Grid item md={4} xs={12}>
-            {coins && !propSymbol ? (
+            {!propSymbol ? (
               <Autocomplete
                 id="virtualize-demo"
                 isOptionEqualToValue={(option, value) => option === value}
