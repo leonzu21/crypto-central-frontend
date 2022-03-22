@@ -29,7 +29,7 @@ import DifferenceChart from "./whale-alert-charts/difference-chart";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
+export const WhaleAlertCharts = ({ propSymbol, coins, ...rest }) => {
   const currDate = GetCurrentDate();
   const [day, setDay] = useState(currDate["day"]);
   const [month, setMonth] = useState(currDate["month"]);
@@ -40,7 +40,7 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
   const [symbolValue, setSymbolValue] = useState(
     propSymbol ? propSymbol : null
   );
-  const [coins, setCoins] = useState([]);
+  // const [coins, setCoins] = useState([]);
   const [endpoint, setEndpoint] = useState(
     !propSymbol
       ? `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
@@ -53,11 +53,11 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
   };
 
   // 3. Create out useEffect function
-  useEffect(() => {
-    fetch("https://api.coingecko.com/api/v3/search?locale=en")
-      .then((response) => response.json())
-      .then((data) => setCoins(data.coins));
-  }, []);
+  // useEffect(() => {
+  //   fetch("https://api.coingecko.com/api/v3/search?locale=en")
+  //     .then((response) => response.json())
+  //     .then((data) => setCoins(data.coins));
+  // }, []);
 
   const { data, error } = useSWR(
     `https://dmc8ptcuv1dn8.cloudfront.net/api/whales/${endpoint}`,

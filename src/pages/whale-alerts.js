@@ -21,7 +21,7 @@ import { WhaleAlertListResults } from "../components/whale-alert/whale-alert-lis
 import { WhaleAlertListToolbar } from "../components/whale-alert/whale-alert-list-toolbar";
 import { WhaleAlertCharts } from "../components/whale-alert/whale-alert-charts";
 
-const WhaleAlerts = () => {
+const WhaleAlerts = (props) => {
   return (
     <>
       <Head>
@@ -43,14 +43,14 @@ const WhaleAlerts = () => {
               item
               xs={12}
             >
-              <WhaleAlertCharts />
+              <WhaleAlertCharts coins={props.coins} />
             </Grid>
             <Grid
               sx={{ m: { xs: 1, md: 1 }, ml: { xs: 0 }, mr: { xs: 0 } }}
               item
               xs={12}
             >
-              <WhaleAlertListResults />
+              <WhaleAlertListResults coins={props.coins} />
             </Grid>
           </Box>
         </Container>

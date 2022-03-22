@@ -32,7 +32,7 @@ import { GetCurrentDate } from "src/utils/get-current-date";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
+export const WhaleAlertListResults = ({ propSymbol, coins, ...rest }) => {
   const currDate = GetCurrentDate();
   const [date, setDate] = useState(null);
   const [day, setDay] = useState(currDate["day"]);
@@ -45,7 +45,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     propSymbol ? propSymbol : null
   );
   const [bySymbol, setBySymbol] = useState(propSymbol ? "BySymbol" : "");
-  const [coins, setCoins] = useState([]);
   const [endpoint, setEndpoint] = useState(
     !propSymbol
       ? `findAllByDayOrderByAmountDesc?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
@@ -56,13 +55,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-
-  // 3. Create out useEffect function
-  useEffect(() => {
-    fetch("https://api.coingecko.com/api/v3/search?locale=en")
-      .then((response) => response.json())
-      .then((data) => setCoins(data.coins));
-  }, []);
 
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
     endpoint
