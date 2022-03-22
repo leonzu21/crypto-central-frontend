@@ -5,7 +5,6 @@ import { GetCurrentDate } from "src/utils/get-current-date";
 import useSWR from "swr";
 import StyledPopper from "../../utils/styled-popper";
 
-
 import {
   Box,
   Card,
@@ -16,7 +15,7 @@ import {
   Divider,
   Chip,
   CardHeader,
-  Typography,
+  Skeleton,
 } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -160,19 +159,31 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
     return (
       <div ref={ref}>
         <OuterElementContext.Provider value={other}>
-          <VariableSizeList
-            itemData={itemData}
-            height={getHeight() + 2 * LISTBOX_PADDING}
-            width="100%"
-            ref={gridRef}
-            outerElementType={OuterElementType}
-            innerElementType="ul"
-            itemSize={(index) => getChildSize(itemData[index])}
-            overscanCount={5}
-            itemCount={itemCount}
-          >
-            {renderRow}
-          </VariableSizeList>
+          {coins ? (
+            <VariableSizeList
+              itemData={itemData}
+              height={getHeight() + 2 * LISTBOX_PADDING}
+              width="100%"
+              ref={gridRef}
+              outerElementType={OuterElementType}
+              innerElementType="ul"
+              itemSize={(index) => getChildSize(itemData[index])}
+              overscanCount={5}
+              itemCount={itemCount}
+            >
+              {renderRow}
+            </VariableSizeList>
+          ) : (
+            <Box
+              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            >
+              <Skeleton animation="wave"/>
+              <Skeleton animation="wave"/>
+              <Skeleton animation="wave"/>
+              <Skeleton animation="wave"/>
+              <Skeleton animation="wave"/>
+            </Box>
+          )}
         </OuterElementContext.Provider>
       </div>
     );
@@ -327,7 +338,6 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
                 }}
               />
             ) : null}
-
           </Grid>
         </Grid>
       </Box>

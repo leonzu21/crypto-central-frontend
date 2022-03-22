@@ -26,6 +26,7 @@ import {
   TextField,
   Grid,
   CardHeader,
+  Skeleton
 } from "@mui/material";
 
 import { GetCurrentDate } from "src/utils/get-current-date";
@@ -56,7 +57,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-
 
   // 3. Create out useEffect function
   useEffect(() => {
@@ -190,25 +190,33 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     return (
       <div ref={ref}>
         <OuterElementContext.Provider value={other}>
-          <VariableSizeList
-            itemData={itemData}
-            height={getHeight() + 2 * LISTBOX_PADDING}
-            width="100%"
-            ref={gridRef}
-            outerElementType={OuterElementType}
-            innerElementType="ul"
-            itemSize={(index) => getChildSize(itemData[index])}
-            overscanCount={5}
-            itemCount={itemCount}
-          >
-            {renderRow}
-          </VariableSizeList>
+          {coins ? (
+            <VariableSizeList
+              itemData={itemData}
+              height={getHeight() + 2 * LISTBOX_PADDING}
+              width="100%"
+              ref={gridRef}
+              outerElementType={OuterElementType}
+              innerElementType="ul"
+              itemSize={(index) => getChildSize(itemData[index])}
+              overscanCount={5}
+              itemCount={itemCount}
+            >
+              {renderRow}
+            </VariableSizeList>
+          ) : (
+            <Box sx={{ "& > img": { mr: 2, flexShrink: 0 } }}>
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+              <Skeleton animation="wave" />
+            </Box>
+          )}
         </OuterElementContext.Provider>
       </div>
     );
   });
-
-  
 
   return (
     <Card {...rest}>
@@ -309,7 +317,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
             />
           </Grid>
           <Grid item md={4} xs={12}>
-
             {coins && !propSymbol ? (
               <Autocomplete
                 id="virtualize-demo"
@@ -387,7 +394,9 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
               <TableBody>{transactionsDisplay}</TableBody>
             </Table>
           </Box>
-        ) : <></>}
+        ) : (
+          <></>
+        )}
       </PerfectScrollbar>
 
       <div component="div">
