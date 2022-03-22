@@ -15,7 +15,6 @@ import {
   Divider,
   Chip,
   CardHeader,
-  Skeleton,
 } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -41,7 +40,7 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
   const [symbolValue, setSymbolValue] = useState(
     propSymbol ? propSymbol : null
   );
-  const [coins, setCoins] = useState(null);
+  const [coins, setCoins] = useState([]);
   const [endpoint, setEndpoint] = useState(
     !propSymbol
       ? `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
@@ -159,31 +158,19 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
     return (
       <div ref={ref}>
         <OuterElementContext.Provider value={other}>
-          {coins ? (
-            <VariableSizeList
-              itemData={itemData}
-              height={getHeight() + 2 * LISTBOX_PADDING}
-              width="100%"
-              ref={gridRef}
-              outerElementType={OuterElementType}
-              innerElementType="ul"
-              itemSize={(index) => getChildSize(itemData[index])}
-              overscanCount={5}
-              itemCount={itemCount}
-            >
-              {renderRow}
-            </VariableSizeList>
-          ) : (
-            <Box
-              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-            >
-              <Skeleton animation="wave"/>
-              <Skeleton animation="wave"/>
-              <Skeleton animation="wave"/>
-              <Skeleton animation="wave"/>
-              <Skeleton animation="wave"/>
-            </Box>
-          )}
+          <VariableSizeList
+            itemData={itemData}
+            height={getHeight() + 2 * LISTBOX_PADDING}
+            width="100%"
+            ref={gridRef}
+            outerElementType={OuterElementType}
+            innerElementType="ul"
+            itemSize={(index) => getChildSize(itemData[index])}
+            overscanCount={5}
+            itemCount={itemCount}
+          >
+            {renderRow}
+          </VariableSizeList>
         </OuterElementContext.Provider>
       </div>
     );
@@ -291,7 +278,6 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
                 isOptionEqualToValue={(option, value) => option === value}
                 size="small"
                 sx={{ width: { md: 300 } }}
-                disablePortal
                 PopperComponent={StyledPopper}
                 ListboxComponent={ListboxComponent}
                 getOptionLabel={(option) => option.name}

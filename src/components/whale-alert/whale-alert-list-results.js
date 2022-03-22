@@ -26,7 +26,6 @@ import {
   TextField,
   Grid,
   CardHeader,
-  Skeleton
 } from "@mui/material";
 
 import { GetCurrentDate } from "src/utils/get-current-date";
@@ -46,7 +45,7 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     propSymbol ? propSymbol : null
   );
   const [bySymbol, setBySymbol] = useState(propSymbol ? "BySymbol" : "");
-  const [coins, setCoins] = useState(null);
+  const [coins, setCoins] = useState([]);
   const [endpoint, setEndpoint] = useState(
     !propSymbol
       ? `findAllByDayOrderByAmountDesc?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
@@ -190,7 +189,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     return (
       <div ref={ref}>
         <OuterElementContext.Provider value={other}>
-          {coins ? (
             <VariableSizeList
               itemData={itemData}
               height={getHeight() + 2 * LISTBOX_PADDING}
@@ -204,15 +202,7 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
             >
               {renderRow}
             </VariableSizeList>
-          ) : (
-            <Box sx={{ "& > img": { mr: 2, flexShrink: 0 } }}>
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-              <Skeleton animation="wave" />
-            </Box>
-          )}
+
         </OuterElementContext.Provider>
       </div>
     );
