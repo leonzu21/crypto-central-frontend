@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { autocompleteClasses } from "@mui/material/Autocomplete";
 
 
-export const StyledPopper = styled(Popper)({
+const StyledPopper = styled(Popper)({
     [`& .${autocompleteClasses.listbox}`]: {
       boxSizing: "border-box",
       "& ul": {
@@ -12,3 +12,5 @@ export const StyledPopper = styled(Popper)({
       },
     },
   });
+
+  export default StyledPopper;
