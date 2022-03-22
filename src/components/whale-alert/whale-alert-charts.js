@@ -1,7 +1,10 @@
+import * as React from "react";
 import DatePicker from "@mui/lab/DatePicker";
 import { useState, useEffect } from "react";
 import { GetCurrentDate } from "src/utils/get-current-date";
 import useSWR from "swr";
+
+import PropTypes from "prop-types";
 
 import {
   Box,
@@ -12,13 +15,22 @@ import {
   Grid,
   Divider,
   Chip,
-  Autocomplete,
   CardHeader,
+  Typography,
 } from "@mui/material";
+
+import useMediaQuery from "@mui/material/useMediaQuery";
+import ListSubheader from "@mui/material/ListSubheader";
+import Popper from "@mui/material/Popper";
+import { useTheme, styled } from "@mui/material/styles";
+import { VariableSizeList } from "react-window";
+
+import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 
 import ToFromChart from "./whale-alert-charts/to-from-chart";
 import TotalChart from "./whale-alert-charts/total-chart";
 import DifferenceChart from "./whale-alert-charts/difference-chart";
+import { NearMeDisabledOutlined } from "@mui/icons-material";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -35,7 +47,9 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
   );
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
-    `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
+    !propSymbol
+      ? `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
+      : `dailyChart?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}&theSymbol=${propSymbol}`
   );
   const [alignment, setAlignment] = useState("24h");
 
@@ -45,16 +59,137 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
 
   // 3. Create out useEffect function
   useEffect(() => {
-    fetch("https://dmc8ptcuv1dn8.cloudfront.net/api/symbols/all")
+    fetch("https://api.coingecko.com/api/v3/search?locale=en")
       .then((response) => response.json())
-      // 4. Setting *dogImage* to the image url that we received from the response above
-      .then((data) => setCoins(data));
+      .then((data) => setCoins(data.coins));
   }, []);
 
   const { data, error } = useSWR(
     `https://dmc8ptcuv1dn8.cloudfront.net/api/whales/${endpoint}`,
     fetcher
   );
+
+  //////////////////////////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///////////////////////////////////////
+  const LISTBOX_PADDING = 8; // px
+
+  function renderRow(props) {
+    const { data, index, style } = props;
+    const dataSet = data[index];
+    const inlineStyle = {
+      ...style,
+      top: style.top + LISTBOX_PADDING,
+    };
+
+    // if (dataSet.hasOwnProperty("group")) {
+    //   return (
+    //     <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
+    //       {dataSet.group}
+    //     </ListSubheader>
+    //   );
+    // }
+    return (
+      <Box
+        component="li"
+        sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+        {...dataSet[0]}
+        style={inlineStyle}
+      >
+        <img
+          loading="lazy"
+          width="20"
+          src={`${dataSet[1].thumb}`}
+          srcSet={`${dataSet[1].thumb} 2x`}
+          alt=""
+        />
+        {dataSet[1].name} ({dataSet[1].symbol}) #{dataSet[1].market_cap_rank}
+      </Box>
+    );
+  }
+
+  const OuterElementContext = React.createContext({});
+
+  const OuterElementType = React.forwardRef((props, ref) => {
+    const outerProps = React.useContext(OuterElementContext);
+    return <div ref={ref} {...props} {...outerProps} />;
+  });
+
+  function useResetCache(data) {
+    const ref = React.useRef(null);
+    React.useEffect(() => {
+      if (ref.current != null) {
+        ref.current.resetAfterIndex(0, true);
+      }
+    }, [data]);
+    return ref;
+  }
+
+  // Adapter for react-window
+  const ListboxComponent = React.forwardRef(function ListboxComponent(
+    props,
+    ref
+  ) {
+    const { children, ...other } = props;
+    const itemData = [];
+    children.forEach((item) => {
+      itemData.push(item);
+      itemData.push(...(item.children || []));
+    });
+
+    const theme = useTheme();
+    const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+      noSsr: true,
+    });
+
+    const itemCount = itemData.length;
+    const itemSize = smUp ? 36 : 48;
+
+    const getChildSize = (child) => {
+      if (child.hasOwnProperty("group")) {
+        return 48;
+      }
+
+      return itemSize;
+    };
+
+    const getHeight = () => {
+      if (itemCount > 8) {
+        return 8 * itemSize;
+      }
+      return itemData.map(getChildSize).reduce((a, b) => a + b, 0);
+    };
+
+    const gridRef = useResetCache(itemCount);
+
+    return (
+      <div ref={ref}>
+        <OuterElementContext.Provider value={other}>
+          <VariableSizeList
+            itemData={itemData}
+            height={getHeight() + 2 * LISTBOX_PADDING}
+            width="100%"
+            ref={gridRef}
+            outerElementType={OuterElementType}
+            innerElementType="ul"
+            itemSize={(index) => getChildSize(itemData[index])}
+            overscanCount={5}
+            itemCount={itemCount}
+          >
+            {renderRow}
+          </VariableSizeList>
+        </OuterElementContext.Provider>
+      </div>
+    );
+  });
+
+  const StyledPopper = styled(Popper)({
+    [`& .${autocompleteClasses.listbox}`]: {
+      boxSizing: "border-box",
+      "& ul": {
+        padding: 0,
+        margin: 0,
+      },
+    },
+  });
 
   return (
     <Card {...rest}>
@@ -152,18 +287,35 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
             />
           </Grid>
           <Grid item md={4} xs={12}>
-            {coins ? (
+            {coins && !propSymbol ? (
               <Autocomplete
-                isOptionEqualToValue={(option, value) => option.label === value}
+                id="virtualize-demo"
+                isOptionEqualToValue={(option, value) => option === value}
                 size="small"
-                disablePortal
-                id="combo-box-demo"
-                value={symbolValue}
-                options={coins}
                 sx={{ width: { md: 300 } }}
-                onInputChange={(event, newValue) => {
-                  setSymbolValue(newValue);
-                  let symb = newValue ? `&theSymbol=${newValue}` : "";
+                disablePortal
+                PopperComponent={StyledPopper}
+                ListboxComponent={ListboxComponent}
+                getOptionLabel={(option) => option.name}
+                options={coins}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="All"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
+                renderOption={(props, option) => [props, option]}
+                onChange={(event, newValue) => {
+                  setSymbolValue(newValue ? newValue.symbol.toLowerCase() : "");
+                  let symb = newValue
+                    ? `&theSymbol=${
+                        newValue ? newValue.symbol.toLowerCase() : ""
+                      }`
+                    : "";
                   setSymbol(symb);
                   switch (filterBy) {
                     case "dai":
@@ -186,16 +338,16 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
                       break;
                   }
                 }}
-                renderInput={(params) => <TextField {...params} label="All" />}
               />
             ) : null}
+
           </Grid>
         </Grid>
       </Box>
       {data ? (
         <Grid container justifyContent="center" alignItems="center">
           <Grid item md={12} xs={12}>
-            <ToFromChart data={data} filterBy={filterBy} />
+            <ToFromChart data={data} filterBy={filterBy} symbol={symbol} />
           </Grid>
           <Grid item xs={12}>
             <Divider size="medium" sx={{ m: 2 }}>
@@ -203,10 +355,10 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
             </Divider>
           </Grid>
           <Grid item md={6} xs={12}>
-            <TotalChart data={data} filterBy={filterBy} />
+            <TotalChart data={data} filterBy={filterBy} symbol={symbol} />
           </Grid>
           <Grid item md={6} xs={12}>
-            <DifferenceChart data={data} filterBy={filterBy} />
+            <DifferenceChart data={data} filterBy={filterBy} symbol={symbol} />
           </Grid>
         </Grid>
       ) : null}

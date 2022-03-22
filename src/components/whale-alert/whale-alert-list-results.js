@@ -3,7 +3,14 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import useSWRInfinite from "swr/infinite";
 import WhaleAlertRow from "./whale-alert-row";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import * as React from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import ListSubheader from "@mui/material/ListSubheader";
+import Popper from "@mui/material/Popper";
+import { useTheme, styled } from "@mui/material/styles";
+import { VariableSizeList } from "react-window";
 
+import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
 import DatePicker from "@mui/lab/DatePicker";
 
 import {
@@ -20,7 +27,6 @@ import {
   TextField,
   Grid,
   CardHeader,
-  Autocomplete,
 } from "@mui/material";
 
 import { GetCurrentDate } from "src/utils/get-current-date";
@@ -28,10 +34,11 @@ import { GetCurrentDate } from "src/utils/get-current-date";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
+  const currDate = GetCurrentDate();
   const [date, setDate] = useState(null);
-  const [day, setDay] = useState(null);
-  const [month, setMonth] = useState(null);
-  const [year, setYear] = useState(null);
+  const [day, setDay] = useState(currDate["day"]);
+  const [month, setMonth] = useState(currDate["month"]);
+  const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("Day");
   const [symbol, setSymbol] = useState(propSymbol ? propSymbol : "");
@@ -41,9 +48,9 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
   const [bySymbol, setBySymbol] = useState(propSymbol ? "BySymbol" : "");
   const [coins, setCoins] = useState(null);
   const [endpoint, setEndpoint] = useState(
-    `findAll${bySymbol}ByDayOrderByAmountDesc?theDate=${
-      GetCurrentDate()["currDate"]
-    }`
+    !propSymbol
+      ? `findAllByDayOrderByAmountDesc?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}`
+      : `findAllBySymbolByDayOrderByAmountDesc?theDate=${currDate["year"]}-${currDate["month"]}-${currDate["day"]}&theSymbol=${propSymbol}`
   );
   const [alignment, setAlignment] = useState("24h");
 
@@ -51,25 +58,24 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     setAlignment(newAlignment);
   };
 
-  useEffect(() => {
-    const currentDate = GetCurrentDate();
-    if (!day) {
-      setDate(currentDate["currDate"]);
-      setDay(currentDate["day"]);
-      setMonth(currentDate["month"]);
-      setYear(currentDate["year"]);
-      setEndpoint(
-        `findAll${bySymbol}ByDayOrderByAmountDesc?theDate=${currentDate["year"]}-${currentDate["month"]}-${currentDate["day"]}`
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   const currentDate = GetCurrentDate();
+  //   if (!day) {
+  //     setDate(currentDate["currDate"]);
+  //     setDay(currentDate["day"]);
+  //     setMonth(currentDate["month"]);
+  //     setYear(currentDate["year"]);
+  //     setEndpoint(
+  //       `findAll${bySymbol}ByDayOrderByAmountDesc?theDate=${currentDate["year"]}-${currentDate["month"]}-${currentDate["day"]}`
+  //     );
+  //   }
+  // }, []);
 
   // 3. Create out useEffect function
   useEffect(() => {
-    fetch("https://dmc8ptcuv1dn8.cloudfront.net/api/symbols/all")
+    fetch("https://api.coingecko.com/api/v3/search?locale=en")
       .then((response) => response.json())
-      // 4. Setting *dogImage* to the image url that we received from the response above
-      .then((data) => setCoins(data));
+      .then((data) => setCoins(data.coins));
   }, []);
 
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
@@ -79,8 +85,9 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
       : null,
     fetcher
   );
-  if (!data) return "Loading...";
+  // if (!data) return "Loading...";
   // const transactions = data ? [].concat(...data) : [];
+
   const transactions = data;
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
@@ -89,16 +96,139 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
   const isEmpty = data?.[0]?.length === 0;
   const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < 6);
   const isRefreshing = isValidating && data && data.length === size;
-
-  let transactionsDisplay = transactions.map((t) => {
-    return t["_embedded"]["transactions"].map((transaction) => {
-      return (
-        <WhaleAlertRow
-          key={transaction.whalealertId}
-          transaction={transaction}
-        />
-      );
+  if (data) {
+    let transactionsDisplay = transactions.map((t) => {
+      return t["_embedded"]["transactions"].map((transaction) => {
+        return (
+          <WhaleAlertRow
+            key={transaction.whalealertId}
+            transaction={transaction}
+          />
+        );
+      });
     });
+  }
+
+  //////////////////////////////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///////////////////////////////////////
+  const LISTBOX_PADDING = 8; // px
+
+  function renderRow(props) {
+    const { data, index, style } = props;
+    const dataSet = data[index];
+    const inlineStyle = {
+      ...style,
+      top: style.top + LISTBOX_PADDING,
+    };
+
+    // if (dataSet.hasOwnProperty("group")) {
+    //   return (
+    //     <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
+    //       {dataSet.group}
+    //     </ListSubheader>
+    //   );
+    // }
+    return (
+      <Box
+        component="li"
+        sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+        {...dataSet[0]}
+        style={inlineStyle}
+      >
+        <img
+          loading="lazy"
+          width="20"
+          src={`${dataSet[1].thumb}`}
+          srcSet={`${dataSet[1].thumb} 2x`}
+          alt=""
+        />
+        {dataSet[1].name} ({dataSet[1].symbol}) #{dataSet[1].market_cap_rank}
+      </Box>
+    );
+  }
+
+  const OuterElementContext = React.createContext({});
+
+  const OuterElementType = React.forwardRef((props, ref) => {
+    const outerProps = React.useContext(OuterElementContext);
+    return <div ref={ref} {...props} {...outerProps} />;
+  });
+
+  function useResetCache(data) {
+    const ref = React.useRef(null);
+    React.useEffect(() => {
+      if (ref.current != null) {
+        ref.current.resetAfterIndex(0, true);
+      }
+    }, [data]);
+    return ref;
+  }
+
+  // Adapter for react-window
+  const ListboxComponent = React.forwardRef(function ListboxComponent(
+    props,
+    ref
+  ) {
+    const { children, ...other } = props;
+    const itemData = [];
+    children.forEach((item) => {
+      itemData.push(item);
+      itemData.push(...(item.children || []));
+    });
+
+    const theme = useTheme();
+    const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+      noSsr: true,
+    });
+
+    const itemCount = itemData.length;
+    const itemSize = smUp ? 36 : 48;
+
+    const getChildSize = (child) => {
+      if (child.hasOwnProperty("group")) {
+        return 48;
+      }
+
+      return itemSize;
+    };
+
+    const getHeight = () => {
+      if (itemCount > 8) {
+        return 8 * itemSize;
+      }
+      return itemData.map(getChildSize).reduce((a, b) => a + b, 0);
+    };
+
+    const gridRef = useResetCache(itemCount);
+
+    return (
+      <div ref={ref}>
+        <OuterElementContext.Provider value={other}>
+          <VariableSizeList
+            itemData={itemData}
+            height={getHeight() + 2 * LISTBOX_PADDING}
+            width="100%"
+            ref={gridRef}
+            outerElementType={OuterElementType}
+            innerElementType="ul"
+            itemSize={(index) => getChildSize(itemData[index])}
+            overscanCount={5}
+            itemCount={itemCount}
+          >
+            {renderRow}
+          </VariableSizeList>
+        </OuterElementContext.Provider>
+      </div>
+    );
+  });
+
+  const StyledPopper = styled(Popper)({
+    [`& .${autocompleteClasses.listbox}`]: {
+      boxSizing: "border-box",
+      "& ul": {
+        padding: 0,
+        margin: 0,
+      },
+    },
   });
 
   return (
@@ -200,7 +330,7 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
             />
           </Grid>
           <Grid item md={4} xs={12}>
-            {coins ? (
+            {/* {coins ? (
               <Autocomplete
                 isOptionEqualToValue={(option, value) => option.label === value}
                 size="small"
@@ -241,26 +371,86 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
                 }}
                 renderInput={(params) => <TextField {...params} label="All" />}
               />
+            ) : null} */}
+
+            {coins && !propSymbol ? (
+              <Autocomplete
+                id="virtualize-demo"
+                isOptionEqualToValue={(option, value) => option === value}
+                size="small"
+                sx={{ width: { md: 300 } }}
+                disablePortal
+                PopperComponent={StyledPopper}
+                ListboxComponent={ListboxComponent}
+                getOptionLabel={(option) => option.name}
+                options={coins}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="All"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
+                renderOption={(props, option) => [props, option]}
+                onChange={(event, newValue) => {
+                  setSymbolValue(newValue ? newValue.symbol.toLowerCase() : "");
+                  let symb = newValue
+                    ? `&theSymbol=${
+                        newValue ? newValue.symbol.toLowerCase() : ""
+                      }`
+                    : "";
+                  let bySymb = newValue ? "BySymbol" : "";
+                  setBySymbol(bySymb);
+                  setSymbol(symb);
+                  switch (filterBy) {
+                    case "Day":
+                      setEndpoint(
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                      );
+                      break;
+                    case "Month":
+                      setEndpoint(
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
+                      );
+                      break;
+                    case "Year":
+                      setEndpoint(
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
+                      );
+                      break;
+                    default:
+                      setEndpoint(
+                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                      );
+                      break;
+                  }
+                }}
+              />
             ) : null}
           </Grid>
         </Grid>
       </Box>
       <PerfectScrollbar>
-        <Box>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Timestamp</TableCell>
-                <TableCell>Symbol</TableCell>
-                <TableCell>From</TableCell>
-                <TableCell>To</TableCell>
-                <TableCell>Value</TableCell>
-                <TableCell>USD</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{transactionsDisplay}</TableBody>
-          </Table>
-        </Box>
+        {data ? (
+          <Box>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Timestamp</TableCell>
+                  <TableCell>Symbol</TableCell>
+                  <TableCell>From</TableCell>
+                  <TableCell>To</TableCell>
+                  <TableCell>Value</TableCell>
+                  <TableCell>USD</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{transactionsDisplay}</TableBody>
+            </Table>
+          </Box>
+        ) : null}
       </PerfectScrollbar>
 
       <div component="div">
