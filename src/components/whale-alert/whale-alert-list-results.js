@@ -387,7 +387,7 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
               <TableBody>{transactionsDisplay}</TableBody>
             </Table>
           </Box>
-        ) : null}
+        ) : <></>}
       </PerfectScrollbar>
 
       <div component="div">
