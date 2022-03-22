@@ -5,12 +5,11 @@ import WhaleAlertRow from "./whale-alert-row";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import * as React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import ListSubheader from "@mui/material/ListSubheader";
-import Popper from "@mui/material/Popper";
-import { useTheme, styled } from "@mui/material/styles";
+import StyledPopper from "../../utils/styled-popper";
+import { useTheme } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 
-import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 import DatePicker from "@mui/lab/DatePicker";
 
 import {
@@ -58,18 +57,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     setAlignment(newAlignment);
   };
 
-  // useEffect(() => {
-  //   const currentDate = GetCurrentDate();
-  //   if (!day) {
-  //     setDate(currentDate["currDate"]);
-  //     setDay(currentDate["day"]);
-  //     setMonth(currentDate["month"]);
-  //     setYear(currentDate["year"]);
-  //     setEndpoint(
-  //       `findAll${bySymbol}ByDayOrderByAmountDesc?theDate=${currentDate["year"]}-${currentDate["month"]}-${currentDate["day"]}`
-  //     );
-  //   }
-  // }, []);
 
   // 3. Create out useEffect function
   useEffect(() => {
@@ -221,15 +208,7 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
     );
   });
 
-  const StyledPopper = styled(Popper)({
-    [`& .${autocompleteClasses.listbox}`]: {
-      boxSizing: "border-box",
-      "& ul": {
-        padding: 0,
-        margin: 0,
-      },
-    },
-  });
+  
 
   return (
     <Card {...rest}>
@@ -330,48 +309,6 @@ export const WhaleAlertListResults = ({ propSymbol, ...rest }) => {
             />
           </Grid>
           <Grid item md={4} xs={12}>
-            {/* {coins ? (
-              <Autocomplete
-                isOptionEqualToValue={(option, value) => option.label === value}
-                size="small"
-                disablePortal
-                id="combo-box-demo"
-                value={symbolValue}
-                options={coins}
-                sx={{ width: { md: 300 } }}
-                onInputChange={(event, newValue) => {
-                  setSymbolValue(newValue);
-                  let symb = newValue ? `&theSymbol=${newValue}` : "";
-                  let bySymb = newValue ? "BySymbol" : "";
-                  setSymbol(symb);
-                  setBySymbol(bySymb);
-                  switch (filterBy) {
-                    case "Day":
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
-                      );
-                      break;
-                    case "Month":
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
-                      );
-                      break;
-                    case "Year":
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
-                      );
-                      break;
-                    default:
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
-                      );
-                      break;
-                  }
-
-                }}
-                renderInput={(params) => <TextField {...params} label="All" />}
-              />
-            ) : null} */}
 
             {coins && !propSymbol ? (
               <Autocomplete

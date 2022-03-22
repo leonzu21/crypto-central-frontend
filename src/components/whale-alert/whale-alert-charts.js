@@ -3,8 +3,8 @@ import DatePicker from "@mui/lab/DatePicker";
 import { useState, useEffect } from "react";
 import { GetCurrentDate } from "src/utils/get-current-date";
 import useSWR from "swr";
+import StyledPopper from "../../utils/styled-popper";
 
-import PropTypes from "prop-types";
 
 import {
   Box,
@@ -20,17 +20,14 @@ import {
 } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
-import ListSubheader from "@mui/material/ListSubheader";
-import Popper from "@mui/material/Popper";
-import { useTheme, styled } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 
-import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import ToFromChart from "./whale-alert-charts/to-from-chart";
 import TotalChart from "./whale-alert-charts/total-chart";
 import DifferenceChart from "./whale-alert-charts/difference-chart";
-import { NearMeDisabledOutlined } from "@mui/icons-material";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -179,16 +176,6 @@ export const WhaleAlertCharts = ({ propSymbol, ...rest }) => {
         </OuterElementContext.Provider>
       </div>
     );
-  });
-
-  const StyledPopper = styled(Popper)({
-    [`& .${autocompleteClasses.listbox}`]: {
-      boxSizing: "border-box",
-      "& ul": {
-        padding: 0,
-        margin: 0,
-      },
-    },
   });
 
   return (
