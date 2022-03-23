@@ -41,7 +41,7 @@ export const WhaleAlertListResults = ({ propSymbol, coins, ...rest }) => {
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("Day");
-  const [symbol, setSymbol] = useState(propSymbol ? propSymbol : "");
+  const [symbol, setSymbol] = useState(propSymbol ? `&theSymbol=${propSymbol}` : "");
   const [symbolValue, setSymbolValue] = useState(
     propSymbol ? propSymbol : null
   );
