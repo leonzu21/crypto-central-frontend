@@ -62,7 +62,6 @@ const ToFromChart = ({ data, filterBy, symbol, ...rest }) => {
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             axisLine={false}
-
             dataKey="Timestamp"
             tickFormatter={(tick) => formatAxis(tick, filterBy)}
           />
@@ -74,7 +73,11 @@ const ToFromChart = ({ data, filterBy, symbol, ...rest }) => {
             }}
           />
           <Tooltip
-            formatter={(value) => `$${new Intl.NumberFormat("en").format(value)}`}
+            formatter={(value) => {
+              return symbol
+                ? `${new Intl.NumberFormat("en").format(value)}`
+                : `$${new Intl.NumberFormat("en").format(value)}`;
+            }}
           />
           <Legend />
           <Bar dataKey="To Wallet" fill="#4DB6AC" />
