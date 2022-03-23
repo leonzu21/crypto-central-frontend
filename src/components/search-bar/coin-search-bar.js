@@ -135,7 +135,7 @@ const CoinSearchBar = ({ coins, ...rest }) => {
       isOptionEqualToValue={(option, value) => option === value}
       size="small"
       freeSolo
-      sx={{ width: { md: 300 } }}
+      sx={{ width: { md: 300, xs: 300 } }}
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       getOptionLabel={(option) => option.name}

@@ -27,7 +27,6 @@ export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
 
   const coins = props.coins.coins;
-  console.log(coins);
   return (
     <>
       <DashboardNavbarRoot
@@ -60,7 +59,7 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          {coins ? <CoinSearchBar coins={coins} /> : <Skeleton sx={{ width: { md: 300 } }} animation="wave" /> }
+          {coins ? <CoinSearchBar coins={coins} /> : <Skeleton sx={{ width: { md: 300, xs: 300 } }} animation="wave" /> }
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="Contacts">
             <IconButton sx={{ ml: 1 }}>
