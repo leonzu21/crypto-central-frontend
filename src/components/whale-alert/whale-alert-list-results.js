@@ -26,6 +26,7 @@ import {
   TextField,
   Grid,
   CardHeader,
+  Skeleton,
 } from "@mui/material";
 
 import { GetCurrentDate } from "src/utils/get-current-date";
@@ -181,20 +182,19 @@ export const WhaleAlertListResults = ({ propSymbol, coins, ...rest }) => {
     return (
       <div ref={ref}>
         <OuterElementContext.Provider value={other}>
-            <VariableSizeList
-              itemData={itemData}
-              height={getHeight() + 2 * LISTBOX_PADDING}
-              width="100%"
-              ref={gridRef}
-              outerElementType={OuterElementType}
-              innerElementType="ul"
-              itemSize={(index) => getChildSize(itemData[index])}
-              overscanCount={5}
-              itemCount={itemCount}
-            >
-              {renderRow}
-            </VariableSizeList>
-
+          <VariableSizeList
+            itemData={itemData}
+            height={getHeight() + 2 * LISTBOX_PADDING}
+            width="100%"
+            ref={gridRef}
+            outerElementType={OuterElementType}
+            innerElementType="ul"
+            itemSize={(index) => getChildSize(itemData[index])}
+            overscanCount={5}
+            itemCount={itemCount}
+          >
+            {renderRow}
+          </VariableSizeList>
         </OuterElementContext.Provider>
       </div>
     );
@@ -300,61 +300,67 @@ export const WhaleAlertListResults = ({ propSymbol, coins, ...rest }) => {
           </Grid>
           <Grid item md={4} xs={12}>
             {!propSymbol ? (
-              <Autocomplete
-                id="virtualize-demo"
-                isOptionEqualToValue={(option, value) => option === value}
-                size="small"
-                sx={{ width: { md: 300 } }}
-                disablePortal
-                PopperComponent={StyledPopper}
-                ListboxComponent={ListboxComponent}
-                getOptionLabel={(option) => option.name}
-                options={coins}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="All"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "off", // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-                renderOption={(props, option) => [props, option]}
-                onChange={(event, newValue) => {
-                  setSymbolValue(newValue ? newValue.symbol.toLowerCase() : "");
-                  let symb = newValue
-                    ? `&theSymbol=${
-                        newValue ? newValue.symbol.toLowerCase() : ""
-                      }`
-                    : "";
-                  let bySymb = newValue ? "BySymbol" : "";
-                  setBySymbol(bySymb);
-                  setSymbol(symb);
-                  switch (filterBy) {
-                    case "Day":
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
-                      );
-                      break;
-                    case "Month":
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
-                      );
-                      break;
-                    case "Year":
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
-                      );
-                      break;
-                    default:
-                      setEndpoint(
-                        `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
-                      );
-                      break;
-                  }
-                }}
-              />
+              coins ? (
+                <Autocomplete
+                  id="virtualize-demo"
+                  isOptionEqualToValue={(option, value) => option === value}
+                  size="small"
+                  sx={{ width: { md: 300 } }}
+                  disablePortal
+                  PopperComponent={StyledPopper}
+                  ListboxComponent={ListboxComponent}
+                  getOptionLabel={(option) => option.name}
+                  options={coins}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="All"
+                      inputProps={{
+                        ...params.inputProps,
+                        autoComplete: "off", // disable autocomplete and autofill
+                      }}
+                    />
+                  )}
+                  renderOption={(props, option) => [props, option]}
+                  onChange={(event, newValue) => {
+                    setSymbolValue(
+                      newValue ? newValue.symbol.toLowerCase() : ""
+                    );
+                    let symb = newValue
+                      ? `&theSymbol=${
+                          newValue ? newValue.symbol.toLowerCase() : ""
+                        }`
+                      : "";
+                    let bySymb = newValue ? "BySymbol" : "";
+                    setBySymbol(bySymb);
+                    setSymbol(symb);
+                    switch (filterBy) {
+                      case "Day":
+                        setEndpoint(
+                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                        );
+                        break;
+                      case "Month":
+                        setEndpoint(
+                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
+                        );
+                        break;
+                      case "Year":
+                        setEndpoint(
+                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
+                        );
+                        break;
+                      default:
+                        setEndpoint(
+                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                        );
+                        break;
+                    }
+                  }}
+                />
+              ) : (
+                <Skeleton sx={{ width: { md: 300 } }} animation="wave" />
+              )
             ) : null}
           </Grid>
         </Grid>

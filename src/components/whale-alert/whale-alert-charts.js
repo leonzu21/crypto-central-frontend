@@ -15,6 +15,7 @@ import {
   Divider,
   Chip,
   CardHeader,
+  Skeleton,
 } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -273,56 +274,64 @@ export const WhaleAlertCharts = ({ propSymbol, coins, ...rest }) => {
           </Grid>
           <Grid item md={4} xs={12}>
             {!propSymbol ? (
-              <Autocomplete
-                id="virtualize-demo"
-                isOptionEqualToValue={(option, value) => option === value}
-                size="small"
-                sx={{ width: { md: 300 } }}
-                PopperComponent={StyledPopper}
-                ListboxComponent={ListboxComponent}
-                getOptionLabel={(option) => option.name}
-                options={coins}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="All"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: "off", // disable autocomplete and autofill
-                    }}
-                  />
-                )}
-                renderOption={(props, option) => [props, option]}
-                onChange={(event, newValue) => {
-                  setSymbolValue(newValue ? newValue.symbol.toLowerCase() : "");
-                  let symb = newValue
-                    ? `&theSymbol=${
-                        newValue ? newValue.symbol.toLowerCase() : ""
-                      }`
-                    : "";
-                  setSymbol(symb);
-                  switch (filterBy) {
-                    case "dai":
-                      setEndpoint(
-                        `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
-                      );
-                      break;
-                    case "month":
-                      setEndpoint(
-                        `${filterBy}lyChart?theDate=${year}-${month}${symb}`
-                      );
-                      break;
-                    case "year":
-                      setEndpoint(`${filterBy}lyChart?theDate=${year}${symb}`);
-                      break;
-                    default:
-                      setEndpoint(
-                        `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
-                      );
-                      break;
-                  }
-                }}
-              />
+              coins ? (
+                <Autocomplete
+                  id="virtualize-demo"
+                  isOptionEqualToValue={(option, value) => option === value}
+                  size="small"
+                  sx={{ width: { md: 300 } }}
+                  PopperComponent={StyledPopper}
+                  ListboxComponent={ListboxComponent}
+                  getOptionLabel={(option) => option.name}
+                  options={coins}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="All"
+                      inputProps={{
+                        ...params.inputProps,
+                        autoComplete: "off", // disable autocomplete and autofill
+                      }}
+                    />
+                  )}
+                  renderOption={(props, option) => [props, option]}
+                  onChange={(event, newValue) => {
+                    setSymbolValue(
+                      newValue ? newValue.symbol.toLowerCase() : ""
+                    );
+                    let symb = newValue
+                      ? `&theSymbol=${
+                          newValue ? newValue.symbol.toLowerCase() : ""
+                        }`
+                      : "";
+                    setSymbol(symb);
+                    switch (filterBy) {
+                      case "dai":
+                        setEndpoint(
+                          `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
+                        );
+                        break;
+                      case "month":
+                        setEndpoint(
+                          `${filterBy}lyChart?theDate=${year}-${month}${symb}`
+                        );
+                        break;
+                      case "year":
+                        setEndpoint(
+                          `${filterBy}lyChart?theDate=${year}${symb}`
+                        );
+                        break;
+                      default:
+                        setEndpoint(
+                          `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
+                        );
+                        break;
+                    }
+                  }}
+                />
+              ) : (
+                <Skeleton sx={{ width: { md: 300 } }} animation="wave" />
+              )
             ) : null}
           </Grid>
         </Grid>
