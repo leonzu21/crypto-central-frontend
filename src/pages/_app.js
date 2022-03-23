@@ -5,7 +5,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { createEmotionCache } from "../utils/create-emotion-cache";
+import { createEmotionCache } from "../components/utils/create-emotion-cache";
 import { theme } from "../theme";
 import "../../public/static/css/index.css";
 
