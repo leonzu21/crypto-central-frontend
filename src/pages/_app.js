@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { CacheProvider } from "@emotion/react";
+import { useEffect, useState } from 'react';
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { CssBaseline } from "@mui/material";
@@ -13,9 +14,17 @@ const clientSideEmotionCache = createEmotionCache();
 
 
 const App = (props) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps, coinsProps } = props;
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
+
+  const [coinsProps, setCoinsProps] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.coingecko.com/api/v3/search?locale=en")
+      .then((response) => response.json())
+      .then((data) => setCoinsProps(data));
+  }, []);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -36,14 +45,14 @@ const App = (props) => {
 export default App;
 
 
-App.getInitialProps = async (Component, ctx) => {
-  let coins = [];
+// App.getInitialProps = async (Component, ctx) => {
+//   let coins = [];
 
-  coins = await fetch("https://api.coingecko.com/api/v3/search?locale=en").then(
-    (response) => response.json()
-  );
+//   coins = await fetch("https://api.coingecko.com/api/v3/search?locale=en").then(
+//     (response) => response.json()
+//   );
 
-  return {
-    coinsProps: coins,
-  };
-};
+//   return {
+//     coinsProps: coins,
+//   };
+// };
