@@ -14,7 +14,7 @@ import {
 } from "recharts";
 
 import useSWR from "swr";
-import nFormatter from "src/utils/n-formatter";
+import nFormatter from "src/components/utils/n-formatter";
 import moment from "moment";
 
 const formatAxis = (tickItem, filterBy) => {

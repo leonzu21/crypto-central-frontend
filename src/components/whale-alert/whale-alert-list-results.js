@@ -5,7 +5,7 @@ import WhaleAlertRow from "./whale-alert-row";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import * as React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import StyledPopper from "../../utils/styled-popper";
+import StyledPopper from "../utils/styled-popper";
 import { useTheme } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 
@@ -29,7 +29,7 @@ import {
   Skeleton,
 } from "@mui/material";
 
-import { GetCurrentDate } from "src/utils/get-current-date";
+import { GetCurrentDate } from "src/components/utils/get-current-date";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
