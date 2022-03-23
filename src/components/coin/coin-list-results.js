@@ -20,7 +20,7 @@ import {
   Paper,
   tableCellClasses,
 } from "@mui/material";
-import { getInitials } from "../../utils/get-initials";
+import { getInitials } from "../utils/get-initials";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

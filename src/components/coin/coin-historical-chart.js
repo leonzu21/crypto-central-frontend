@@ -9,12 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import useSWR from "swr";
-import { GetCurrentDate } from "src/utils/get-current-date";
+import { GetCurrentDate } from "src/components/utils/get-current-date";
 import moment from "moment";
-import nFormatter from "src/utils/n-formatter";
+import nFormatter from "src/components/utils/n-formatter";
 import DatePicker from "@mui/lab/DatePicker";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { ChartLoadingSpinner } from "../../utils/chart-loading-spinner";
+import { ChartLoadingSpinner } from "../utils/chart-loading-spinner";
 
 import {
   LineChart,

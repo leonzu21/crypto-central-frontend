@@ -38,7 +38,7 @@ const items = [
     title: "Whale Alerts",
   },
   {
-    href: "/account",
+    href: "/ico",
     icon: <FiberNewIcon fontSize="small" />,
     title: "ICO Drops",
   },
