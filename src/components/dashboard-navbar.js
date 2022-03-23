@@ -8,12 +8,15 @@ import {
   IconButton,
   Toolbar,
   Tooltip,
+  Skeleton
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Bell as BellIcon } from "../icons/bell";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
 import { Users as UsersIcon } from "../icons/users";
+
+import CoinSearchBar from "./search-bar/coin-search-bar";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -24,6 +27,7 @@ export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
 
   const coins = props.coins.coins;
+  console.log(coins);
   return (
     <>
       <DashboardNavbarRoot
@@ -56,11 +60,7 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          <Tooltip title="Search">
-            <IconButton sx={{ ml: 1 }}>
-              <SearchIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          {coins ? <CoinSearchBar coins={coins} /> : <Skeleton sx={{ width: { md: 300 } }} animation="wave" /> }
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="Contacts">
             <IconButton sx={{ ml: 1 }}>
