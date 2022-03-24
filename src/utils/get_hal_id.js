@@ -1,0 +1,1 @@
+export const getHalId = link => link._links.self.href.substring(link._links.self.href.lastIndexOf("/") + 1);
