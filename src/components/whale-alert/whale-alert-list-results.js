@@ -29,7 +29,7 @@ import {
   Skeleton,
 } from "@mui/material";
 
-import { GetCurrentDate } from "src/components/utils/get-current-date";
+import { GetCurrentDate } from "src/utils/get-current-date";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 

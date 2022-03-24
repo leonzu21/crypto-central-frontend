@@ -18,7 +18,7 @@ import {
   makeStyles,
 } from "recharts";
 
-import nFormatter from "src/components/utils/n-formatter";
+import nFormatter from "src/utils/n-formatter";
 
 import moment from "moment";
 
