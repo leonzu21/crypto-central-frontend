@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import { Box, Container, Grid, Pagination } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard-layout";
-import { Link } from "../../components/utils/Link";
 import { icoService } from "../../services/ico.service";
-import { ProductListToolbar } from "src/components/product/product-list-toolbar";
-import { ProductCard } from '../../components/product/product-card';
+import { IcoListToolbar } from "src/components/ico/ico-list-toolbar";
+import { IcoCard } from '../../components/ico/ico-card';
 
 const Icos = () => {
   const [icos, setIcos] = useState(null);
@@ -14,10 +13,10 @@ const Icos = () => {
     icoService.getAll().then(x => setIcos(x._embedded.icoes))
   }, []);
 
-
+  console.log(icos);
   function deleteIco(id) {
-    setUsers(
-      users.map((x) => {
+    setIcos(
+      icos.map((x) => {
         if (x.id === id) {
           x.isDeleting = true;
         }
@@ -25,7 +24,7 @@ const Icos = () => {
       })
     );
     icoService.delete(id).then(() => {
-      setUsers((users) => users.filter((x) => x.id !== id));
+      setIcos((icos) => icos.filter((x) => x.id !== id));
     });
   }
 
@@ -44,21 +43,21 @@ const Icos = () => {
       }}
     >
       <Container maxWidth={false}>
-        <ProductListToolbar />
+        <IcoListToolbar />
         <Box sx={{ pt: 3 }}>
           <Grid
             container
             spacing={3}
           >
-            {icos && icos.map((product) => (
+            {icos && icos.map((ico) => (
               <Grid
                 item
-                key={product.id}
+                key={ico.id}
                 lg={4}
                 md={6}
                 xs={12}
               >
-                <ProductCard product={product} />
+                <IcoCard ico={ico} />
               </Grid>
             ))}
           </Grid>
