@@ -9,11 +9,14 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import CakeIcon from "@mui/icons-material/Cake";
+import { getHalId } from "src/utils/get_hal_id";
 
 import NextLink from "next/link";
 
-export const IcoCard = ({ ico, ...rest }) => {
+export const IcoCard = ({ deleteIco, ico, ...rest }) => {
   return (
     <Card
       sx={{
@@ -83,18 +86,23 @@ export const IcoCard = ({ ico, ...rest }) => {
               display: "flex",
             }}
           >
-            {/* <Button
-              component={NextLink}
-              href={`/icos/edit/${ico.id}`}
+            <NextLink href={`/icos/edit/${getHalId(ico)}`}>
+              <Button sx={{ p: 0 }} size="small" color="info">
+                Edit
+              </Button>
+            </NextLink>
+
+            <Button
+              onClick={() => deleteIco(getHalId(ico))}
               sx={{ p: 0 }}
               size="small"
-              color="info"
+              color="error"
             >
-              Edit
-            </Button> */}
-
-            <Button sx={{ p: 0 }} size="small" color="error">
-              Delete
+              {ico.isDeleting ? (
+                <CircularProgress color="error" sx={{ p: 1 }} />
+              ) : (
+                <span>Delete</span>
+              )}
             </Button>
           </Grid>
         </Grid>
