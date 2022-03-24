@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 // import { Link } from 'components';
-import { userService, alertService } from 'src/services';
+import { icoService, alertService } from 'src/services';
 
 export { AddEdit };
 
