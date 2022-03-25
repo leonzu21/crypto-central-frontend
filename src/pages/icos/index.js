@@ -52,7 +52,7 @@ const Icos = () => {
                 ))}
             </Grid>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -60,7 +60,7 @@ const Icos = () => {
             }}
           >
             <Pagination color="primary" count={3} size="small" />
-          </Box>
+          </Box> */}
         </Container>
       </Box>
     </>
