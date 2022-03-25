@@ -16,7 +16,7 @@ function getAll() {
 }
 
 function getById(id) {
-    return fetchWrapper.get(`http://localhost:5000/api/icoes/${id}`);
+    return fetchWrapper.get(`${baseUrl}/icoes/${id}`);
 }
 
 function create(params) {
