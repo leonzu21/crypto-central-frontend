@@ -19,14 +19,14 @@ const WhaleAlertRow = ({ transaction, ...rest }) => {
       <TableCell>{transaction.symbol}</TableCell>
       <TableCell
         style={{
-          color: transaction.fromOwner ? "#E65100" : "black",
+          color: transaction.fromOwner ? "#5048E5" : "black",
         }}
       >
         {transaction.fromOwner ? transaction.fromOwner : "wallet"}
       </TableCell>
       <TableCell
         style={{
-          color: transaction.toOwner ? "#E65100" : "black",
+          color: transaction.toOwner ? "#5048E5" : "black",
         }}
       >
         {transaction.toOwner ? transaction.toOwner : "wallet"}
