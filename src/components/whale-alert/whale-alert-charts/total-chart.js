@@ -80,7 +80,7 @@ const TotalChart = ({ data, filterBy, symbol, ...rest }) => {
             }}
           />
           <Legend />
-          <Bar dataKey="Total" fill="#4DB6AC" />
+          <Bar dataKey="Total" fill="#5048E5" />
         </BarChart>
       </PerfectScrollbar>
     </div>

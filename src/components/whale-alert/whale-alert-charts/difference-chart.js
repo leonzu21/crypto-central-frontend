@@ -90,7 +90,7 @@ const DifferenceChart = ({ data, filterBy, symbol, ...rest }) => {
               <span
                 style={{
                   background:
-                    "-webkit-linear-gradient(45deg, #EF5350 45%, #4DB6AC 55%)",
+                    "-webkit-linear-gradient(45deg, #10B981 45%, #5048E5 55%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -100,11 +100,11 @@ const DifferenceChart = ({ data, filterBy, symbol, ...rest }) => {
             )}
           />
           <ReferenceLine y={0} stroke="#000" />
-          <Bar dataKey="Difference" fill="#EF5350">
+          <Bar dataKey="Difference" fill="#10B981">
             {data.map((entry, index) => (
               <Cell
                 key={index}
-                fill={entry["Difference"] < 0 ? "#EF5350" : "#4DB6AC"}
+                fill={entry["Difference"] < 0 ? "#10B981" : "#5048E5"}
               />
             ))}
           </Bar>

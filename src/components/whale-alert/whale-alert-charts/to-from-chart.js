@@ -80,8 +80,8 @@ const ToFromChart = ({ data, filterBy, symbol, ...rest }) => {
             }}
           />
           <Legend />
-          <Bar dataKey="To Wallet" fill="#4DB6AC" />
-          <Bar dataKey="From Wallet" fill="#EF5350" />
+          <Bar dataKey="To Wallet" fill="#5048E5" />
+          <Bar dataKey="From Wallet" fill="#10B981" />
         </BarChart>
       </PerfectScrollbar>
     </div>
