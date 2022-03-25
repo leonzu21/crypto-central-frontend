@@ -155,7 +155,7 @@ function AddEdit(props) {
                       label="Price($)"
                       type="number"
                       name="price"
-                      inputProps={{ step: "0.1", lang: "en-US" }}
+                      inputProps={{ step: "0.000001", lang: "en-US" }}
                       {...register("price")}
                       variant="outlined"
                     />
