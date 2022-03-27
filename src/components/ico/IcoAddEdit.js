@@ -26,10 +26,8 @@ import {
 // import { Link } from 'components';
 import { icoService, alertService } from "src/services";
 
-export { AddEdit };
-
-function AddEdit(props) {
-  const ico = props?.ico;
+const IcoAddEdit = (props) => {
+  const ico = props.ico ? props.ico : null;
   const isAddMode = !ico;
   const router = useRouter();
 
@@ -206,9 +204,9 @@ function AddEdit(props) {
                       fullWidth
                       InputLabelProps={{ shrink: true }}
                       label="% of Total Supply"
-                      name="totalCent"
+                      name="centTotal"
                       type="text"
-                      {...register("totalCent")}
+                      {...register("centTotal")}
                       variant="outlined"
                     ></TextField>
                   </Grid>
@@ -391,4 +389,6 @@ function AddEdit(props) {
       </Grid>
     </>
   );
-}
+};
+
+export default IcoAddEdit;
