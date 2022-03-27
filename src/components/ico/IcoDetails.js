@@ -10,7 +10,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import GaugeChart from "react-gauge-chart";
 import LinkIcon from "@mui/icons-material/Link";
 import TabIcon from "@mui/icons-material/Tab";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import NextLink from "next/link";
 import {
   Box,
   Button,
@@ -25,7 +25,6 @@ import {
 
 import LinearProgress from "@mui/material/LinearProgress";
 import { WindowSharp } from "@mui/icons-material";
-
 
 const IcoDetails = (props) => {
   const [expand, setExpand] = useState(false);
@@ -419,10 +418,22 @@ const IcoDetails = (props) => {
               </Grid>
             </Grid>
           </Box>
+          <Box sx={{ m: 1 }}>
+            <NextLink href={`/icos`}>
+              <Button
+                sx={{ p: 0 }}
+                color="secondary"
+                variant="contained"
+                sx={{ mr: 1 }}
+              >
+                Return
+              </Button>
+            </NextLink>
+          </Box>
         </Container>
       </Box>
     </>
   );
-}
+};
 
 export default IcoDetails;
