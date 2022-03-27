@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import {
   Avatar,
   Box,
@@ -16,7 +17,13 @@ import { getHalId } from "src/utils/get_hal_id";
 
 import NextLink from "next/link";
 
+import GaugeChart from "react-gauge-chart";
+
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+
 export const IcoCard = ({ deleteIco, ico, ...rest }) => {
+  const [isOpening, setIsOpening] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <Card
       sx={{
@@ -31,19 +38,35 @@ export const IcoCard = ({ deleteIco, ico, ...rest }) => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            pb: 3,
           }}
         >
-          <Avatar alt="Ico" src={ico.media} variant="square" />
+          <GaugeChart
+            colors={["#FF5F6D", "#10B981"]}
+            hideText
+            style={{ width: "35%" }}
+            cornerRadius={6}
+            nrOfLevels={10}
+            // textColor="#5048E5"
+            percent={ico.confidenceLevel / 10}
+            arcPadding={0.1}
+          />
+
+          {/* <Avatar>
+            <CreditCardIcon color="primary" />{" "}
+          </Avatar> */}
         </Box>
-        <Typography
-          align="center"
-          color="textPrimary"
-          gutterBottom
-          variant="h5"
-        >
-          {ico.name}
-        </Typography>
+        <NextLink href={`/icos/${getHalId(ico)}`}>
+          <a style={{ textDecoration: "none" }}>
+            <Typography
+              align="center"
+              color="textPrimary"
+              gutterBottom
+              variant="h5"
+            >
+              {ico.name}
+            </Typography>
+          </a>
+        </NextLink>
         <Typography
           align="center"
           color="textPrimary"
@@ -86,9 +109,32 @@ export const IcoCard = ({ deleteIco, ico, ...rest }) => {
               display: "flex",
             }}
           >
+            <NextLink href={`/icos/${getHalId(ico)}`}>
+              <Button
+                onClick={() => setIsOpening(true)}
+                sx={{ p: 0 }}
+                size="small"
+                color="success"
+              >
+                {isOpening ? (
+                  <CircularProgress color="info" sx={{ p: 1 }} />
+                ) : (
+                  <span>See more</span>
+                )}
+              </Button>
+            </NextLink>
             <NextLink href={`/icos/edit/${getHalId(ico)}`}>
-              <Button sx={{ p: 0 }} size="small" color="info">
-                Edit
+              <Button
+                onClick={() => setIsEditing(true)}
+                sx={{ p: 0 }}
+                size="small"
+                color="info"
+              >
+                {isEditing ? (
+                  <CircularProgress color="info" sx={{ p: 1 }} />
+                ) : (
+                  <span>Edit</span>
+                )}
               </Button>
             </NextLink>
 
