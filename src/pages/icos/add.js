@@ -1,7 +1,9 @@
-import { AddEdit } from 'src/components/ico';
+import IcoAddEdit from "src/components/ico/IcoAddEdit";
 import { DashboardLayout } from "../../components/dashboard-layout";
 
+const IcoAdd = () => {
+  return <IcoAddEdit/>;
+};
 
-export default AddEdit;
-
-AddEdit.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+IcoAdd.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+export default IcoAdd;
