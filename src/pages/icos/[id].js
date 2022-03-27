@@ -1,14 +1,22 @@
-import { IcoDetails } from "src/components/ico";
+import IcoDetails from "src/components/ico/IcoDetails";
+import { useState, useEffect } from "react";
 import { icoService } from "src/services";
+import { useRouter } from "next/router";
+
 import { DashboardLayout } from "../../components/dashboard-layout";
 
-export default IcoDetails;
+const Ico = () => {
+  const router = useRouter();
 
-export async function getServerSideProps({ params }) {
-  const ico = await icoService.getById(params.id);
+  const icoId = router.query.id;
+  const [ico, setIco] = useState(null);
 
-  return {
-    props: { ico },
-  };
-}
-IcoDetails.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+  useEffect(() => {
+    icoService.getById(icoId).then((x) => setIco(x));
+  }, []);
+
+  return <IcoDetails ico={ico} />;
+};
+
+Ico.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+export default Ico;

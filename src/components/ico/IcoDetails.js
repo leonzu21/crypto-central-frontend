@@ -26,9 +26,8 @@ import {
 import LinearProgress from "@mui/material/LinearProgress";
 import { WindowSharp } from "@mui/icons-material";
 
-export { IcoDetails };
 
-function IcoDetails(props) {
+const IcoDetails = (props) => {
   const [expand, setExpand] = useState(false);
   const onClick = () => {
     setExpand(!expand);
@@ -425,3 +424,5 @@ function IcoDetails(props) {
     </>
   );
 }
+
+export default IcoDetails;
