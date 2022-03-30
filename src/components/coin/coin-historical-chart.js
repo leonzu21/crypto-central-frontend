@@ -11,11 +11,13 @@ import {
 import useSWR from "swr";
 import { GetCurrentDate } from "src/utils/get-current-date";
 import moment from "moment";
-import nFormatter from "src/utils/n-formatter";
 import DatePicker from "@mui/lab/DatePicker";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ChartLoadingSpinner } from "../utils/chart-loading-spinner";
 import { useTheme } from "@mui/material";
+
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 
 import {
   LineChart,
@@ -54,6 +56,9 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
   );
   const [format, setFormat] = useState("HH:00");
   const theme = useTheme();
+
+  const isDesktopFormat = useMediaQuery("(min-width:700px)");
+
 
   const setTimePeriod = (period) => {
     const currDate = parseInt(
@@ -135,7 +140,7 @@ export const CoinHistoricalChart = ({ coin, ...rest }) => {
             //   prices[Math.round((5 * prices.length) / 6)].timestamp,
             //   prices[prices.length - 1].timestamp,
             // ]}
-            interval={Math.round(prices.length / 15)}
+            interval={isDesktopFormat ? Math.round(prices.length / 15) : Math.round(prices.length / 15) * 3}
             tickFormatter={(date) => {
               const timestamp = moment(date, "DD-MM-yyyy HH:mm:ss").valueOf();
 
