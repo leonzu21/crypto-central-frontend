@@ -34,7 +34,6 @@ const App = (props) => {
 
   const ThemeContext = useContext(CustomThemeContext);
 
-  console.log(ThemeContext);
 
   return (
     <SessionProvider session={session}>
