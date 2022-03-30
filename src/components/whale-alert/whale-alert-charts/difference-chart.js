@@ -13,14 +13,12 @@ import {
   Legend,
   ReferenceLine,
   Cell,
-  Typography,
-  withStyles,
-  makeStyles,
 } from "recharts";
 
 import nFormatter from "src/utils/n-formatter";
 
 import moment from "moment";
+import { useTheme } from "@mui/material";
 
 const formatAxis = (tickItem, filterBy) => {
   let format = "HH";
@@ -44,6 +42,7 @@ const DifferenceChart = ({ data, filterBy, symbol, ...rest }) => {
   const { width, height } = useContainerDimensions(componentRef);
   const isDesktopFormat = useMediaQuery("(min-width:700px)");
   const customWidth = isDesktopFormat ? width : width * 1.5;
+  const theme = useTheme();
 
   return (
     <div ref={componentRef}>
@@ -78,6 +77,10 @@ const DifferenceChart = ({ data, filterBy, symbol, ...rest }) => {
             }}
           />
           <Tooltip
+            cursor={{ opacity: 0.1 }}
+            contentStyle={{
+              backgroundColor: theme.palette.background.default,
+            }}
             formatter={(value) => {
               return symbol
                 ? `${new Intl.NumberFormat("en").format(value)}`
