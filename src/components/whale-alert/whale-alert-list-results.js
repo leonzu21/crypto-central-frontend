@@ -41,7 +41,9 @@ export const WhaleAlertListResults = ({ propSymbol, coins, ...rest }) => {
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("Day");
-  const [symbol, setSymbol] = useState(propSymbol ? `&theSymbol=${propSymbol}` : "");
+  const [symbol, setSymbol] = useState(
+    propSymbol ? `&theSymbol=${propSymbol}` : ""
+  );
   const [symbolValue, setSymbolValue] = useState(
     propSymbol ? propSymbol : null
   );
@@ -205,163 +207,171 @@ export const WhaleAlertListResults = ({ propSymbol, coins, ...rest }) => {
       <CardHeader title="Biggest Whale Alerts" />
       <Box sx={{ m: 1 }}>
         <Grid container>
-          <Grid item xs={8} md={4} sx={{ mb: { xs: 1 } }}>
-            <ToggleButtonGroup
-              size="small"
-              value={alignment}
-              exclusive
-              onChange={handleAlignment}
-              aria-label="text alignment"
-            >
-              <ToggleButton
-                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
-                value="24h"
-                onClick={() => {
-                  setEndpoint(
-                    `findAll${bySymbol}ByDayOrderByAmountDesc?theDate=${year}-${month}-${day}${symbol}`
-                  );
-                  setFilterBy("Day");
-                }}
+          <Grid item xs={12} sx={{ mr: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <ToggleButtonGroup
+                size="small"
+                value={alignment}
+                exclusive
+                onChange={handleAlignment}
+                aria-label="text alignment"
               >
-                24h
-              </ToggleButton>
-              <ToggleButton
-                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
-                value="30d"
-                onClick={() => {
-                  setEndpoint(
-                    `findAll${bySymbol}ByMonthOrderByAmountDesc?theDate=${year}-${month}${symbol}`
-                  );
-                  setFilterBy("Month");
-                }}
-              >
-                30d
-              </ToggleButton>
-              <ToggleButton
-                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
-                value="1y"
-                onClick={() => {
-                  setEndpoint(
-                    `findAll${bySymbol}ByYearOrderByAmountDesc?theDate=${year}${symbol}`
-                  );
-                  setFilterBy("Year");
-                }}
-              >
-                1y
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
-          <Grid item xs={4} md={4}>
-            <DatePicker
-              label="Choose a date"
-              value={value}
-              onChange={(newValue) => {
-                let calDay = newValue.getDate();
-                let calMonth = newValue.getMonth() + 1;
-                calMonth = calMonth < 10 ? `0${calMonth}` : `${calMonth}`;
-                let calYear = newValue.getFullYear();
-                setValue(newValue);
-                switch (filterBy) {
-                  case "Day":
+                <ToggleButton
+                  sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                  value="24h"
+                  onClick={() => {
                     setEndpoint(
-                      `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calDay}${symbol}`
+                      `findAll${bySymbol}ByDayOrderByAmountDesc?theDate=${year}-${month}-${day}${symbol}`
                     );
-                    break;
-                  case "Month":
-                    setEndpoint(
-                      `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}${symbol}`
-                    );
-                    break;
-                  case "Year":
-                    setEndpoint(
-                      `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}${symbol}`
-                    );
-                    break;
-                  default:
-                    setEndpoint(
-                      `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}${symbol}`
-                    );
-                    break;
-                }
-                calDay = calDay < 10 ? `0${calDay}` : `${calDay}`;
-                setDay(calDay);
-                setMonth(calMonth);
-                setYear(calYear);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  size="small"
-                  sx={{ width: { md: 300 } }}
-                  fontSize="small"
-                  {...params}
-                />
-              )}
-            />
-          </Grid>
-          <Grid item md={4} xs={12}>
-            {!propSymbol ? (
-              coins ? (
-                <Autocomplete
-                  id="virtualize-demo"
-                  isOptionEqualToValue={(option, value) => option === value}
-                  size="small"
-                  sx={{ width: { md: 300 } }}
-                  disablePortal
-                  PopperComponent={StyledPopper}
-                  ListboxComponent={ListboxComponent}
-                  getOptionLabel={(option) => option.name}
-                  options={coins}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="All"
-                      inputProps={{
-                        ...params.inputProps,
-                        autoComplete: "off", // disable autocomplete and autofill
-                      }}
-                    />
-                  )}
-                  renderOption={(props, option) => [props, option]}
-                  onChange={(event, newValue) => {
-                    setSymbolValue(
-                      newValue ? newValue.symbol.toLowerCase() : ""
-                    );
-                    let symb = newValue
-                      ? `&theSymbol=${
-                          newValue ? newValue.symbol.toLowerCase() : ""
-                        }`
-                      : "";
-                    let bySymb = newValue ? "BySymbol" : "";
-                    setBySymbol(bySymb);
-                    setSymbol(symb);
-                    switch (filterBy) {
-                      case "Day":
-                        setEndpoint(
-                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
-                        );
-                        break;
-                      case "Month":
-                        setEndpoint(
-                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
-                        );
-                        break;
-                      case "Year":
-                        setEndpoint(
-                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
-                        );
-                        break;
-                      default:
-                        setEndpoint(
-                          `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
-                        );
-                        break;
-                    }
+                    setFilterBy("Day");
                   }}
-                />
-              ) : (
-                <Skeleton sx={{ width: { md: 300 } }} animation="wave" />
-              )
-            ) : null}
+                >
+                  24h
+                </ToggleButton>
+                <ToggleButton
+                  sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                  value="30d"
+                  onClick={() => {
+                    setEndpoint(
+                      `findAll${bySymbol}ByMonthOrderByAmountDesc?theDate=${year}-${month}${symbol}`
+                    );
+                    setFilterBy("Month");
+                  }}
+                >
+                  30d
+                </ToggleButton>
+                <ToggleButton
+                  sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                  value="1y"
+                  onClick={() => {
+                    setEndpoint(
+                      `findAll${bySymbol}ByYearOrderByAmountDesc?theDate=${year}${symbol}`
+                    );
+                    setFilterBy("Year");
+                  }}
+                >
+                  1y
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "end", m: 1 }}>
+              <DatePicker
+                label="Choose a date"
+                value={value}
+                onChange={(newValue) => {
+                  let calDay = newValue.getDate();
+                  let calMonth = newValue.getMonth() + 1;
+                  calMonth = calMonth < 10 ? `0${calMonth}` : `${calMonth}`;
+                  let calYear = newValue.getFullYear();
+                  setValue(newValue);
+                  switch (filterBy) {
+                    case "Day":
+                      setEndpoint(
+                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calDay}${symbol}`
+                      );
+                      break;
+                    case "Month":
+                      setEndpoint(
+                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}${symbol}`
+                      );
+                      break;
+                    case "Year":
+                      setEndpoint(
+                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}${symbol}`
+                      );
+                      break;
+                    default:
+                      setEndpoint(
+                        `findAll${bySymbol}By${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}${symbol}`
+                      );
+                      break;
+                  }
+                  calDay = calDay < 10 ? `0${calDay}` : `${calDay}`;
+                  setDay(calDay);
+                  setMonth(calMonth);
+                  setYear(calYear);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    size="small"
+                    fullWidth
+                    sx={{ width: { md: 300 } }}
+                    fontSize="small"
+                    {...params}
+                  />
+                )}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sx={{ mr: 1, ml: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              {!propSymbol ? (
+                coins ? (
+                  <Autocomplete
+                    id="virtualize-demo"
+                    isOptionEqualToValue={(option, value) => option === value}
+                    size="small"
+                    fullWidth
+                    sx={{ width: { md: 300 } }}
+                    disablePortal
+                    PopperComponent={StyledPopper}
+                    ListboxComponent={ListboxComponent}
+                    getOptionLabel={(option) => option.name}
+                    options={coins}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="All"
+                        inputProps={{
+                          ...params.inputProps,
+                          autoComplete: "off", // disable autocomplete and autofill
+                        }}
+                      />
+                    )}
+                    renderOption={(props, option) => [props, option]}
+                    onChange={(event, newValue) => {
+                      setSymbolValue(
+                        newValue ? newValue.symbol.toLowerCase() : ""
+                      );
+                      let symb = newValue
+                        ? `&theSymbol=${
+                            newValue ? newValue.symbol.toLowerCase() : ""
+                          }`
+                        : "";
+                      let bySymb = newValue ? "BySymbol" : "";
+                      setBySymbol(bySymb);
+                      setSymbol(symb);
+                      switch (filterBy) {
+                        case "Day":
+                          setEndpoint(
+                            `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                          );
+                          break;
+                        case "Month":
+                          setEndpoint(
+                            `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}${symb}`
+                          );
+                          break;
+                        case "Year":
+                          setEndpoint(
+                            `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}${symb}`
+                          );
+                          break;
+                        default:
+                          setEndpoint(
+                            `findAll${bySymb}By${filterBy}OrderByAmountDesc?theDate=${year}-${month}-${day}${symb}`
+                          );
+                          break;
+                      }
+                    }}
+                  />
+                ) : (
+                  <Skeleton sx={{ width: { md: 300 } }} animation="wave" />
+                )
+              ) : null}
+            </Box>
           </Grid>
         </Grid>
       </Box>

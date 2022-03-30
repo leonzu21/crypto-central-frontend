@@ -37,7 +37,9 @@ export const WhaleAlertCharts = ({ propSymbol, coins, ...rest }) => {
   const [year, setYear] = useState(currDate["year"]);
   const [value, setValue] = useState(Date());
   const [filterBy, setFilterBy] = useState("dai");
-  const [symbol, setSymbol] = useState(propSymbol ? `&theSymbol=${propSymbol}` : "");
+  const [symbol, setSymbol] = useState(
+    propSymbol ? `&theSymbol=${propSymbol}` : ""
+  );
   const [symbolValue, setSymbolValue] = useState(
     propSymbol ? propSymbol : null
   );
@@ -182,157 +184,167 @@ export const WhaleAlertCharts = ({ propSymbol, coins, ...rest }) => {
       <CardHeader title="Whale Alerts Chart" />
       <Box sx={{ m: 1 }}>
         <Grid container>
-          <Grid item md={4} xs={8} sx={{ mb: { xs: 1 } }}>
-            <ToggleButtonGroup
-              size="small"
-              value={alignment}
-              exclusive
-              onChange={handleAlignment}
-              aria-label="text alignment"
-            >
-              <ToggleButton
-                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
-                value="24h"
-                onClick={() => {
-                  setFilterBy("dai");
-                  setEndpoint(
-                    `dailyChart?theDate=${year}-${month}-${day}${symbol}`
-                  );
-                }}
+          <Grid item xs={12} sx={{ mr: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <ToggleButtonGroup
+                size="small"
+                value={alignment}
+                exclusive
+                onChange={handleAlignment}
+                aria-label="text alignment"
               >
-                24h
-              </ToggleButton>
-              <ToggleButton
-                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
-                value="30d"
-                onClick={() => {
-                  setFilterBy("month");
-                  setEndpoint(`monthlyChart?theDate=${year}-${month}${symbol}`);
-                }}
-              >
-                30d
-              </ToggleButton>
-              <ToggleButton
-                sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
-                value="1y"
-                onClick={() => {
-                  setFilterBy("year");
-                  setEndpoint(`yearlyChart?theDate=${year}${symbol}`);
-                }}
-              >
-                1y
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
-          <Grid item md={4} xs={4}>
-            <DatePicker
-              label="Choose a date"
-              value={value}
-              onChange={(newValue) => {
-                let calDay = newValue.getDate();
-                let calMonth = newValue.getMonth() + 1;
-                calMonth = calMonth < 10 ? `0${calMonth}` : `${calMonth}`;
-                calDay = calDay < 10 ? `0${calDay}` : `${calDay}`;
-                let calYear = newValue.getFullYear();
-                switch (filterBy) {
-                  case "dai":
+                <ToggleButton
+                  sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                  value="24h"
+                  onClick={() => {
+                    setFilterBy("dai");
                     setEndpoint(
-                      `${filterBy}lyChart?theDate=${calYear}-${calMonth}-${calDay}${symbol}`
+                      `dailyChart?theDate=${year}-${month}-${day}${symbol}`
                     );
-                    break;
-                  case "month":
-                    setEndpoint(
-                      `${filterBy}lyChart?theDate=${calYear}-${calMonth}${symbol}`
-                    );
-                    break;
-                  case "year":
-                    setEndpoint(
-                      `${filterBy}lyChart?theDate=${calYear}${symbol}`
-                    );
-                    break;
-                  default:
-                    setEndpoint(
-                      `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}${symbol}`
-                    );
-                    break;
-                }
-                setValue(newValue);
-                setDay(calDay);
-                setMonth(calMonth);
-                setYear(calYear);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  size="small"
-                  fullWidth
-                  fontSize="small"
-                  sx={{ width: { md: 300 } }}
-                  {...params}
-                />
-              )}
-            />
-          </Grid>
-          <Grid item md={4} xs={12}>
-            {!propSymbol ? (
-              coins ? (
-                <Autocomplete
-                  id="virtualize-demo"
-                  isOptionEqualToValue={(option, value) => option === value}
-                  size="small"
-                  sx={{ width: { md: 300 } }}
-                  PopperComponent={StyledPopper}
-                  ListboxComponent={ListboxComponent}
-                  getOptionLabel={(option) => option.name}
-                  options={coins}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="All"
-                      inputProps={{
-                        ...params.inputProps,
-                        autoComplete: "off", // disable autocomplete and autofill
-                      }}
-                    />
-                  )}
-                  renderOption={(props, option) => [props, option]}
-                  onChange={(event, newValue) => {
-                    setSymbolValue(
-                      newValue ? newValue.symbol.toLowerCase() : ""
-                    );
-                    let symb = newValue
-                      ? `&theSymbol=${
-                          newValue ? newValue.symbol.toLowerCase() : ""
-                        }`
-                      : "";
-                    setSymbol(symb);
-                    switch (filterBy) {
-                      case "dai":
-                        setEndpoint(
-                          `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
-                        );
-                        break;
-                      case "month":
-                        setEndpoint(
-                          `${filterBy}lyChart?theDate=${year}-${month}${symb}`
-                        );
-                        break;
-                      case "year":
-                        setEndpoint(
-                          `${filterBy}lyChart?theDate=${year}${symb}`
-                        );
-                        break;
-                      default:
-                        setEndpoint(
-                          `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
-                        );
-                        break;
-                    }
                   }}
-                />
-              ) : (
-                <Skeleton sx={{ width: { md: 300 } }} animation="wave" />
-              )
-            ) : null}
+                >
+                  24h
+                </ToggleButton>
+                <ToggleButton
+                  sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                  value="30d"
+                  onClick={() => {
+                    setFilterBy("month");
+                    setEndpoint(
+                      `monthlyChart?theDate=${year}-${month}${symbol}`
+                    );
+                  }}
+                >
+                  30d
+                </ToggleButton>
+                <ToggleButton
+                  sx={{ pl: { md: 2, xs: 1 }, pr: { md: 2, xs: 1 } }}
+                  value="1y"
+                  onClick={() => {
+                    setFilterBy("year");
+                    setEndpoint(`yearlyChart?theDate=${year}${symbol}`);
+                  }}
+                >
+                  1y
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", justifyContent: "end", m: 1 }}>
+              <DatePicker
+                label="Choose a date"
+                value={value}
+                onChange={(newValue) => {
+                  let calDay = newValue.getDate();
+                  let calMonth = newValue.getMonth() + 1;
+                  calMonth = calMonth < 10 ? `0${calMonth}` : `${calMonth}`;
+                  calDay = calDay < 10 ? `0${calDay}` : `${calDay}`;
+                  let calYear = newValue.getFullYear();
+                  switch (filterBy) {
+                    case "dai":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${calYear}-${calMonth}-${calDay}${symbol}`
+                      );
+                      break;
+                    case "month":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${calYear}-${calMonth}${symbol}`
+                      );
+                      break;
+                    case "year":
+                      setEndpoint(
+                        `${filterBy}lyChart?theDate=${calYear}${symbol}`
+                      );
+                      break;
+                    default:
+                      setEndpoint(
+                        `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}${symbol}`
+                      );
+                      break;
+                  }
+                  setValue(newValue);
+                  setDay(calDay);
+                  setMonth(calMonth);
+                  setYear(calYear);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    size="small"
+                    fullWidth
+                    fontSize="small"
+                    sx={{ width: { md: 300 } }}
+                    {...params}
+                  />
+                )}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sx={{ mr: 1, ml: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              {!propSymbol ? (
+                coins ? (
+                  <Autocomplete
+                    id="virtualize-demo"
+                    isOptionEqualToValue={(option, value) => option === value}
+                    size="small"
+                    fullWidth
+                    sx={{ width: { md: 300 } }}
+                    PopperComponent={StyledPopper}
+                    ListboxComponent={ListboxComponent}
+                    getOptionLabel={(option) => option.name}
+                    options={coins}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="All"
+                        fullWidth
+                        inputProps={{
+                          ...params.inputProps,
+                          autoComplete: "off", // disable autocomplete and autofill
+                        }}
+                      />
+                    )}
+                    renderOption={(props, option) => [props, option]}
+                    onChange={(event, newValue) => {
+                      setSymbolValue(
+                        newValue ? newValue.symbol.toLowerCase() : ""
+                      );
+                      let symb = newValue
+                        ? `&theSymbol=${
+                            newValue ? newValue.symbol.toLowerCase() : ""
+                          }`
+                        : "";
+                      setSymbol(symb);
+                      switch (filterBy) {
+                        case "dai":
+                          setEndpoint(
+                            `${filterBy}lyChart?theDate=${year}-${month}-${day}${symb}`
+                          );
+                          break;
+                        case "month":
+                          setEndpoint(
+                            `${filterBy}lyChart?theDate=${year}-${month}${symb}`
+                          );
+                          break;
+                        case "year":
+                          setEndpoint(
+                            `${filterBy}lyChart?theDate=${year}${symb}`
+                          );
+                          break;
+                        default:
+                          setEndpoint(
+                            `findAllBy${filterBy}OrderByAmountDesc?theDate=${calYear}-${calMonth}-${calYear}`
+                          );
+                          break;
+                      }
+                    }}
+                  />
+                ) : (
+                  <Skeleton sx={{ width: { md: 300 } }} animation="wave" />
+                )
+              ) : null}
+            </Box>
           </Grid>
         </Grid>
       </Box>
