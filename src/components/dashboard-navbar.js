@@ -82,7 +82,7 @@ export const DashboardNavbar = (props) => {
 
           <ThemeModeToggle />
 
-          <Tooltip title="Contacts">
+          {/* <Tooltip title="Contacts">
             <IconButton sx={{ ml: 1 }}>
               <UsersIcon fontSize="small" />
             </IconButton>
@@ -93,7 +93,7 @@ export const DashboardNavbar = (props) => {
                 <BellIcon fontSize="small" />
               </Badge>
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Avatar
             sx={{
               height: 40,
