@@ -2,7 +2,7 @@ import * as React from "react";
 import StyledPopper from "../utils/styled-popper";
 import NextLink from "next/link";
 
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -46,8 +46,10 @@ const CoinSearchBar = ({ coins, ...rest }) => {
               srcSet={`${dataSet[1].thumb} 2x`}
               alt=""
             />
-            {dataSet[1].name} ({dataSet[1].symbol}) #
-            {dataSet[1].market_cap_rank}
+            <Typography color="secondary" variant="subtitle1">
+              {dataSet[1].name} ({dataSet[1].symbol}) #
+              {dataSet[1].market_cap_rank}
+            </Typography>
           </Box>
         </a>
       </NextLink>

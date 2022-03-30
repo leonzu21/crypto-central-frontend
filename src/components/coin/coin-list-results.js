@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import PropTypes from "prop-types";
-import { format } from "date-fns";
+
 import useSWRInfinite from "swr/infinite";
 import Link from "next/link";
 import {
   Avatar,
   Box,
   Card,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -18,9 +15,9 @@ import {
   Typography,
   TableContainer,
   Paper,
-  tableCellClasses,
 } from "@mui/material";
-import { getInitials } from "src/utils/get-initials";
+
+import { useTheme } from "@mui/material";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -37,6 +34,8 @@ export const CoinListResults = ({ ...rest }) => {
     setPage(newPage);
   };
 
+  const theme = useTheme();
+
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
     (index) =>
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=${page}&sparkline=true&price_change_percentage=1h,24,7d
@@ -51,14 +50,7 @@ export const CoinListResults = ({ ...rest }) => {
   return (
     <Card>
       <TableContainer component={Paper}>
-        <Table
-          sx={{
-            [`& .${tableCellClasses.root}`]: {
-              borderBottom: "1px inset #E0E0E0",
-            },
-          }}
-          size="small"
-        >
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>#</TableCell>
@@ -81,7 +73,10 @@ export const CoinListResults = ({ ...rest }) => {
                   style={{
                     position: "sticky",
                     left: 0,
-                    background: "white",
+                    background: theme.palette.background.paper,
+                    "&:hover": {
+                      background: theme.palette.action.hover
+                    }
                   }}
                 >
                   <Box
@@ -92,7 +87,7 @@ export const CoinListResults = ({ ...rest }) => {
                   >
                     <Avatar src={coin.image} sx={{ mr: 2 }} />
                     <Link href={`/coins/${coin.id}`}>
-                      <a>
+                      <a style={{ textDecoration: "none" }}>
                         <Typography color="textPrimary" variant="body1">
                           {coin.name}
                         </Typography>
@@ -107,8 +102,8 @@ export const CoinListResults = ({ ...rest }) => {
                   style={{
                     color:
                       coin.price_change_percentage_1h_in_currency < 0
-                        ? "#D50000"
-                        : "#2E7D32",
+                        ? theme.palette.error.main
+                        : theme.palette.success.main,
                   }}
                 >
                   {coin.price_change_percentage_1h_in_currency.toFixed(1)}%
@@ -117,8 +112,8 @@ export const CoinListResults = ({ ...rest }) => {
                   style={{
                     color:
                       coin.price_change_percentage_24h < 0
-                        ? "#D50000"
-                        : "#2E7D32",
+                        ? theme.palette.error.main
+                        : theme.palette.secondary.main,
                   }}
                 >
                   {coin.price_change_percentage_24h.toFixed(1)}%
@@ -127,8 +122,8 @@ export const CoinListResults = ({ ...rest }) => {
                   style={{
                     color:
                       coin.price_change_percentage_7d_in_currency < 0
-                        ? "#D50000"
-                        : "#2E7D32",
+                        ? theme.palette.error.main
+                        : theme.palette.secondary.main,
                   }}
                 >
                   {coin.price_change_percentage_7d_in_currency.toFixed(1)}%

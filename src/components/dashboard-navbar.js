@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
+import { useContext } from "react";
 import {
   AppBar,
   Avatar,
@@ -8,13 +9,15 @@ import {
   IconButton,
   Toolbar,
   Tooltip,
-  Skeleton
+  Skeleton,
+  Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import { Bell as BellIcon } from "../icons/bell";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
 import { Users as UsersIcon } from "../icons/users";
+import { useSession, signIn, signOut } from "next-auth/react";
+import ThemeModeToggle from "./utils/ThemeModeToggle";
 
 import CoinSearchBar from "./search-bar/coin-search-bar";
 
@@ -25,8 +28,19 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
+  const { data: session } = useSession();
 
   const coins = props.coins.coins;
+  const sessionButton = session ? (
+    <Button color="error" onClick={() => signOut()}>
+      Sign out
+    </Button>
+  ) : (
+    <Button color="success" onClick={() => signIn()}>
+      Sign in
+    </Button>
+  );
+
   return (
     <>
       <DashboardNavbarRoot
@@ -59,8 +73,15 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          {coins ? <CoinSearchBar coins={coins} /> : <Skeleton sx={{ width: { md: 300, xs: 300 } }} animation="wave" /> }
+          {coins ? (
+            <CoinSearchBar coins={coins} />
+          ) : (
+            <Skeleton sx={{ width: { md: 300, xs: 300 } }} animation="wave" />
+          )}
           <Box sx={{ flexGrow: 1 }} />
+
+          <ThemeModeToggle />
+
           <Tooltip title="Contacts">
             <IconButton sx={{ ml: 1 }}>
               <UsersIcon fontSize="small" />
@@ -83,6 +104,7 @@ export const DashboardNavbar = (props) => {
           >
             <UserCircleIcon fontSize="small" />
           </Avatar>
+          {sessionButton}
         </Toolbar>
       </DashboardNavbarRoot>
     </>

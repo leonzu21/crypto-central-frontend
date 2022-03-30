@@ -1,9 +1,12 @@
 import { TableCell, TableRow } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from '@mui/material';
+
 
 import moment from "moment";
 
 const WhaleAlertRow = ({ transaction, ...rest }) => {
+  const theme = useTheme();
   const isDesktopFormat = useMediaQuery("(min-width:700px)");
   return (
     <TableRow hover>
@@ -19,14 +22,14 @@ const WhaleAlertRow = ({ transaction, ...rest }) => {
       <TableCell>{transaction.symbol}</TableCell>
       <TableCell
         style={{
-          color: transaction.fromOwner ? "#5048E5" : "black",
+          color: transaction.fromOwner ? theme.palette.primary.main : theme.palette.secondary.main,
         }}
       >
         {transaction.fromOwner ? transaction.fromOwner : "wallet"}
       </TableCell>
       <TableCell
         style={{
-          color: transaction.toOwner ? "#5048E5" : "black",
+          color: transaction.toOwner ? theme.palette.primary.main : theme.palette.secondary.main,
         }}
       >
         {transaction.toOwner ? transaction.toOwner : "wallet"}
