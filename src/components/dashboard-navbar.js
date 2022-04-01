@@ -100,7 +100,8 @@ export const DashboardNavbar = (props) => {
               width: 40,
               ml: 1,
             }}
-            src="/static/images/avatars/avatar_mada.jpg"
+            src={session ? session.token.picture : "/static/images/avatars/avatar_mada.jpg"}
+            alt="/static/images/avatars/avatar_mada.jpg"
           >
             <UserCircleIcon fontSize="small" />
           </Avatar>
