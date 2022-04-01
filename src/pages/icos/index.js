@@ -6,8 +6,9 @@ import { icoService } from "../../services/ico.service";
 import { IcoListToolbar } from "src/components/ico/ico-list-toolbar";
 import { IcoCard } from "../../components/ico/ico-card";
 import { getHalId } from "src/utils/get_hal_id";
+import { getSession } from "next-auth/react";
 
-const Icos = () => {
+const Icos = ({ userSession }) => {
   const [icos, setIcos] = useState(null);
 
   useEffect(() => {
@@ -68,5 +69,15 @@ const Icos = () => {
 };
 
 Icos.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export async function getServerSideProps(context) {
+  // Get the user
+  const userSession = await getSession(context);
+  return {
+    props: {
+      userSession,
+    },
+  };
+}
 
 export default Icos;
