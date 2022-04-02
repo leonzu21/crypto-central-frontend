@@ -115,8 +115,8 @@ export const DashboardSidebar = (props) => {
                   <a>
                     <img
                       style={{
-                        height: 75,
-                        width: 75,
+                        height: 100,
+                        width: 100,
                       }}
                       src="logo.png"
                       alt="logo"
