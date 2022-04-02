@@ -9,7 +9,8 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { WhaleAlertCharts } from "src/components/whale-alert/whale-alert-charts";
 import { WhaleAlertListResults } from "src/components/whale-alert/whale-alert-list-results";
-
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../api/auth/[...nextauth]";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 // export const getStaticProps = async (context) => {
@@ -99,5 +100,19 @@ const Coin = () => {
   );
 };
 Coin.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export async function getServerSideProps(context) {
+  // Get the user
+  const { res } = context;
+  res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
+  const userSession = await getServerSession(context, authOptions);
+
+  console.log(userSession)
+  return {
+    props: {
+      userSession,
+    },
+  };
+}
 
 export default Coin;

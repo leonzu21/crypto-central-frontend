@@ -3,8 +3,8 @@ import { Box, Container } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { CoinListResults } from "../../components/coin/coin-list-results";
 import { CoinListToolbar } from "../../components/coin/coin-list-toolbar";
-
-
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 const Coins = () => (
   <>
@@ -28,5 +28,18 @@ const Coins = () => (
   </>
 );
 Coins.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export async function getServerSideProps(context) {
+  // Get the user
+  const { res } = context;
+  res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
+  const userSession = await getServerSession(context, authOptions);
+
+  return {
+    props: {
+      userSession,
+    },
+  };
+}
 
 export default Coins;

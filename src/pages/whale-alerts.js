@@ -20,6 +20,8 @@ import { DashboardLayout } from "../components/dashboard-layout";
 import { WhaleAlertListResults } from "../components/whale-alert/whale-alert-list-results";
 import { WhaleAlertListToolbar } from "../components/whale-alert/whale-alert-list-toolbar";
 import { WhaleAlertCharts } from "../components/whale-alert/whale-alert-charts";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const WhaleAlerts = (props) => {
   return (
@@ -59,5 +61,18 @@ const WhaleAlerts = (props) => {
   );
 };
 WhaleAlerts.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export async function getServerSideProps(context) {
+  // Get the user
+  const { res } = context;
+  res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
+  const userSession = await getServerSession(context, authOptions);
+
+  return {
+    props: {
+      userSession,
+    },
+  };
+}
 
 export default WhaleAlerts;

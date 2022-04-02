@@ -4,6 +4,8 @@ import { icoService } from "src/services";
 import { useRouter } from "next/router";
 
 import { DashboardLayout } from "../../components/dashboard-layout";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 const Ico = () => {
   const router = useRouter();
@@ -19,4 +21,18 @@ const Ico = () => {
 };
 
 Ico.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export async function getServerSideProps(context) {
+  // Get the user
+  const { res } = context;
+  res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
+  const userSession = await getServerSession(context, authOptions);
+
+  return {
+    props: {
+      userSession,
+    },
+  };
+}
+
 export default Ico;
