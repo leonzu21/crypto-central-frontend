@@ -1,7 +1,7 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   // Configure one or more authentication providers
   providers: [
     Auth0Provider({
@@ -12,8 +12,8 @@ export const authOptions: NextAuthOptions = {
     // ...add more providers here
   ],
   callbacks: {
-    session: async ({ session, user, token }) => {
-      return Promise.resolve({ session, token });
+    async session({ session, user, token }) {
+      return { session, token };
     },
   },
   secret: process.env.AUTH_SECRET,
