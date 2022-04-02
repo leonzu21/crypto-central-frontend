@@ -18,8 +18,6 @@ export const DashboardLayout = (props) => {
   const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-  console.log(props);
-
   return (
     <>
       <DashboardLayoutRoot>
@@ -35,7 +33,7 @@ export const DashboardLayout = (props) => {
         </Box>
       </DashboardLayoutRoot>
       <DashboardNavbar
-        userSession={props.children.props.userSession}
+        usersession={props.children.props.userSession}
         coins={props.children.props.coins}
         onSidebarOpen={() => setSidebarOpen(true)}
       />

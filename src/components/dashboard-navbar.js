@@ -28,7 +28,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
-  const session = props.userSession;
+  const session = props.usersession;
 
   const coins = props.coins;
   const sessionButton = session ? (
