@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 
-export default NextAuth({
+export const authOptions = ({
   // Configure one or more authentication providers
   providers: [
     Auth0Provider({
@@ -13,8 +13,10 @@ export default NextAuth({
   ],
   callbacks: {
     async session({ session, user, token }) {
-      return { session, user, token };
+      return { session, token };
     },
   },
   secret: process.env.AUTH_SECRET,
 });
+
+export default NextAuth(authOptions);

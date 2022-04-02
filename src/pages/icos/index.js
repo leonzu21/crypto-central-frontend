@@ -6,7 +6,8 @@ import { icoService } from "../../services/ico.service";
 import { IcoListToolbar } from "src/components/ico/ico-list-toolbar";
 import { IcoCard } from "../../components/ico/ico-card";
 import { getHalId } from "src/utils/get_hal_id";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 const Icos = ({ userSession }) => {
   const [icos, setIcos] = useState(null);
@@ -74,7 +75,9 @@ export async function getServerSideProps(context) {
   // Get the user
   const { res } = context;
   res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
-  const userSession = await getSession(context);
+  const userSession = await getServerSession(context, authOptions);
+
+  console.log(userSession);
 
   return {
     props: {
