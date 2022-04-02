@@ -11,8 +11,6 @@ IcoAdd.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export async function getServerSideProps(context) {
   // Get the user
-  const { res } = context;
-  res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
   const userSession = await getServerSession(context, authOptions);
 
   return {
