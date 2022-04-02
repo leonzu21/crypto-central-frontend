@@ -28,9 +28,9 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
-  const { data: session } = useSession();
+  const session = props.userSession;
 
-  const coins = props.coins.coins;
+  const coins = props.coins;
   const sessionButton = session ? (
     <Button color="error" onClick={() => signOut()}>
       Sign out

@@ -77,8 +77,6 @@ export async function getServerSideProps(context) {
   res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
   const userSession = await getServerSession(context, authOptions);
 
-  console.log(userSession);
-
   return {
     props: {
       userSession,

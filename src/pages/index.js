@@ -1,8 +1,10 @@
 import Head from "next/head";
 import { Box } from "@mui/material";
 import { DashboardLayout } from "../components/dashboard-layout";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
 
-const Dashboard = () => (
+const Dashboard = ({ userSession }) => (
   <>
     <Head>
       <title>Dashboard | Crypto Central</title>
@@ -15,14 +17,8 @@ const Dashboard = () => (
       }}
       style={{ textAlign: "center" }}
     >
-      <header
-        className="App-header"
-      >
-        <img
-          src="logo.png"
-          alt="logo"
-          className="Applogo"
-        />
+      <header className="App-header">
+        <img src="logo.png" alt="logo" className="Applogo" />
         <p>Crypto Central</p>
       </header>
       {/* <Container maxWidth={false}>
@@ -109,5 +105,18 @@ const Dashboard = () => (
 );
 
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+
+export async function getServerSideProps(context) {
+  // Get the user
+  const { res } = context;
+  res.setHeader("Cache-Control", `s-maxage=60, stale-while-revalidate`);
+  const userSession = await getServerSession(context, authOptions);
+
+  return {
+    props: {
+      userSession,
+    },
+  };
+}
 
 export default Dashboard;
