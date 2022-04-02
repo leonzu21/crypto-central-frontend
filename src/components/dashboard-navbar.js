@@ -30,8 +30,6 @@ export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   const session = props.usersession;
 
-  console.log(session);
-
   const coins = props.coins;
   const sessionButton = session ? (
     <Button color="error" onClick={() => signOut()}>
