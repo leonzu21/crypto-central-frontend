@@ -113,11 +113,13 @@ export const DashboardSidebar = (props) => {
               <div>
                 <NextLink href="/" passHref>
                   <a>
-                    <Logo
-                      sx={{
-                        height: 42,
-                        width: 42,
+                    <img
+                      style={{
+                        height: 75,
+                        width: 75,
                       }}
+                      src="logo.png"
+                      alt="logo"
                     />
                   </a>
                 </NextLink>
