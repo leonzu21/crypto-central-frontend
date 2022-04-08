@@ -11,23 +11,23 @@ export const icoService = {
 
 const baseUrl = `${apiUrl}/icoes`;
 
-function getAll() {
-    return fetchWrapper.get(baseUrl);
+function getAll(token) {
+    return fetchWrapper.get(baseUrl, token);
 }
 
-function getById(id) {
-    return fetchWrapper.get(`${baseUrl}/${id}`);
+function getById(id, token) {
+    return fetchWrapper.get(`${baseUrl}/${id}`, token);
 }
 
-function create(params) {
-    return fetchWrapper.post(baseUrl, params);
+function create(params, token) {
+    return fetchWrapper.post(baseUrl, params, token);
 }
 
-function update(id, params) {
-    return fetchWrapper.put(`${baseUrl}/${id}`, params);
+function update(id, params, token) {
+    return fetchWrapper.put(`${baseUrl}/${id}`, params, token);
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-function _delete(id) {
-    return fetchWrapper.delete(`${baseUrl}/${id}`);
+function _delete(id, token) {
+    return fetchWrapper.delete(`${baseUrl}/${id}`, token);
 }
