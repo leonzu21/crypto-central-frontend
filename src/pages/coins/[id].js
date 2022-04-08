@@ -105,7 +105,6 @@ export async function getServerSideProps(context) {
   // Get the user
   const userSession = await getServerSession(context, authOptions);
 
-  console.log(userSession)
   return {
     props: {
       userSession,

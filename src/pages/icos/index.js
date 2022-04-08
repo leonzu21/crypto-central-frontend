@@ -12,9 +12,13 @@ import { authOptions } from "../api/auth/[...nextauth]";
 const Icos = ({ userSession }) => {
   const [icos, setIcos] = useState(null);
 
-  useEffect(() => {
-    icoService.getAll().then((x) => setIcos(x._embedded.icoes));
-  }, []);
+  if (userSession) {
+    useEffect(() => {
+      icoService
+        .getAll(userSession.session.accessToken)
+        .then((x) => setIcos(x._embedded.icoes));
+    }, []);
+  }
 
   function deleteIco(id) {
     setIcos(
@@ -25,7 +29,7 @@ const Icos = ({ userSession }) => {
         return x;
       })
     );
-    icoService.delete(id).then(() => {
+    icoService.delete(id, userSession.session.accessToken).then(() => {
       setIcos((icos) => icos.filter((x) => getHalId(x) !== id));
     });
   }

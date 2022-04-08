@@ -59,14 +59,14 @@ const IcoAddEdit = (props) => {
           ? data.birthday
           : data.birthday.toISOString().slice(0, 10);
     }
-    return isAddMode ? createIco(data) : updateIco(getHalId(ico), data);
+    return isAddMode ? createIco(data, props.userSession.session.accessToken) : updateIco(getHalId(ico), data, props.userSession.session.accessToken);
   }
 
   const handleRegistration = (data) => alert(JSON.stringify(data));
 
-  function createIco(data) {
+  function createIco(data, token) {
     return icoService
-      .create(data)
+      .create(data, token)
       .then(() => {
         alertService.success("Project added", { keepAfterRouteChange: true });
         router.push(".");
@@ -74,9 +74,9 @@ const IcoAddEdit = (props) => {
       .catch(alertService.error);
   }
 
-  function updateIco(id, data) {
+  function updateIco(id, data, token) {
     return icoService
-      .update(id, data)
+      .update(id, data, token)
       .then(() => {
         alertService.success("Project updated", { keepAfterRouteChange: true });
         router.push("..");

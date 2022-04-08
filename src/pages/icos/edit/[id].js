@@ -8,19 +8,20 @@ import { DashboardLayout } from "../../../components/dashboard-layout";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/[...nextauth]";
 
-const IcoEdit = () => {
+const IcoEdit = ({ userSession }) => {
   const router = useRouter();
 
   const icoId = router.query.id;
   const [ico, setIco] = useState(null);
 
-  useEffect(() => {
-    icoService.getById(icoId).then((x) => setIco(x));
-  }, []);
+  if (userSession)
+    useEffect(() => {
+      icoService.getById(icoId, userSession.session.accessToken).then((x) => setIco(x));
+    }, []);
 
   let icoAddEdit = null;
 
-  if (ico) icoAddEdit = <IcoAddEdit ico={ico} />;
+  if (ico) icoAddEdit = <IcoAddEdit ico={ico} userSession={userSession} />;
 
   return icoAddEdit;
 };

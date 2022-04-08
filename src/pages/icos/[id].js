@@ -7,15 +7,18 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-const Ico = () => {
+const Ico = ({ userSession }) => {
   const router = useRouter();
 
   const icoId = router.query.id;
   const [ico, setIco] = useState(null);
 
-  useEffect(() => {
-    icoService.getById(icoId).then((x) => setIco(x));
-  }, []);
+  if (userSession)
+    useEffect(() => {
+      icoService
+        .getById(icoId, userSession.session.accessToken)
+        .then((x) => setIco(x));
+    }, []);
 
   return <IcoDetails ico={ico} />;
 };
