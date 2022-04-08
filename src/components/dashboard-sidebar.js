@@ -78,7 +78,7 @@ const MultiLevel = ({ item }) => {
           startIcon={item.icon}
           disableRipple
           sx={{
-            backgroundColor: openItem && "rgba(255,255,255, 0.08)",
+            // backgroundColor: openItem && "rgba(255,255,255, 0.08)",
             borderRadius: 1,
             color: openItem ? "primary.main" : "neutral.300",
             fontWeight: openItem && "fontWeightBold",
@@ -103,7 +103,7 @@ const MultiLevel = ({ item }) => {
           </Box>
         </Button>
       </ListItem>
-      <Collapse in={openItem} timeout="auto" unmountOnExit>
+      <Collapse style={{marginLeft: 25}} in={openItem} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {children.map((child, key) => (
             <MenuItem key={key} item={child} />
