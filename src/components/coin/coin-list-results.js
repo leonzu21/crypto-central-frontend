@@ -103,7 +103,7 @@ export const CoinListResults = ({ ...rest }) => {
                     color:
                       coin.price_change_percentage_1h_in_currency < 0
                         ? theme.palette.error.main
-                        : theme.palette.success.main,
+                        : theme.palette.secondary.main,
                   }}
                 >
                   {coin.price_change_percentage_1h_in_currency.toFixed(1)}%
