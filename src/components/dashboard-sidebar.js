@@ -26,7 +26,6 @@ import CurrencyBitcoinIcon from "@mui/icons-material/CurrencyBitcoin";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
-import { NavItemMultilevel } from "./nav-item-multi";
 
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
