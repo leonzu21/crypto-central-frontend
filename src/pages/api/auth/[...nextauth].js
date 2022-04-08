@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
-import jwt from "jsonwebtoken";
 
 export const authOptions = {
   // Configure one or more authentication providers
