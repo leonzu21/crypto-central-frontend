@@ -12,8 +12,6 @@ import { authOptions } from "../api/auth/[...nextauth]";
 const Icos = ({ userSession }) => {
   const [icos, setIcos] = useState(null);
 
-  console.log(process.env)
-
   if (userSession) {
     useEffect(() => {
       icoService

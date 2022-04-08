@@ -28,6 +28,9 @@ export const authOptions = {
 
     async session({ session, token }) {
       session.accessToken = token.accessToken;
+      console.log('!!!!!!!!!!!!!!!!!!!!ce-i asta fa!!!!!!!!!!!!!!!!!!')
+      console.log(process.env.AUTH0_CLIENT_ID);
+      console.log(process.env.AUTH0_AUDIENCE);
       return {session, token};
     },
   },
