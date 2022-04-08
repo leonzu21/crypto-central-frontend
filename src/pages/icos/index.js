@@ -12,12 +12,16 @@ import { authOptions } from "../api/auth/[...nextauth]";
 const Icos = ({ userSession }) => {
   const [icos, setIcos] = useState(null);
 
+  let toolbar = "You must be logged in to add ICOs";
+
   if (userSession) {
     useEffect(() => {
       icoService
         .getAll(userSession.session.accessToken)
         .then((x) => setIcos(x._embedded.icoes));
     }, []);
+
+    toolbar = <IcoListToolbar />;
   }
 
   function deleteIco(id) {
@@ -47,7 +51,7 @@ const Icos = ({ userSession }) => {
         }}
       >
         <Container maxWidth={false}>
-          <IcoListToolbar />
+          {toolbar}
           <Box sx={{ pt: 3 }}>
             <Grid container spacing={3}>
               {icos &&
