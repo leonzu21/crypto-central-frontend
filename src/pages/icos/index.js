@@ -17,7 +17,7 @@ const Icos = ({ userSession }) => {
   if (userSession) {
     useEffect(() => {
       icoService
-        .getAll(userSession.session.accessToken)
+        .getAll(userSession.session.accessToken, userSession.session.userId)
         .then((x) => setIcos(x._embedded.icoes));
     }, []);
 

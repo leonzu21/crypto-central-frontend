@@ -9,10 +9,11 @@ export const icoService = {
     delete: _delete
 };
 
-const baseUrl = `${apiUrl}/icoes`;
+const baseUrl = `${apiUrl}/icoes`; 
+const findByUserUrl = `${baseUrl}/search/findByUser?theUser=`
 
-function getAll(token) {
-    return fetchWrapper.get(baseUrl, token);
+function getAll(token, userId) {
+    return fetchWrapper.get(`${findByUserUrl}${userId}`, token);
 }
 
 function getById(id, token) {

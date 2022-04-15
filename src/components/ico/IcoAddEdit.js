@@ -59,7 +59,9 @@ const IcoAddEdit = (props) => {
           ? data.birthday
           : data.birthday.toISOString().slice(0, 10);
     }
-    return isAddMode ? createIco(data, props.userSession.session.accessToken) : updateIco(getHalId(ico), data, props.userSession.session.accessToken);
+    return isAddMode
+      ? createIco(data, props.userSession.session.accessToken)
+      : updateIco(getHalId(ico), data, props.userSession.session.accessToken);
   }
 
   const handleRegistration = (data) => alert(JSON.stringify(data));
@@ -335,6 +337,7 @@ const IcoAddEdit = (props) => {
                       {errors.description?.message}
                     </span>
                   </Grid>
+                  <input type="hidden" {...register("user")} value={props.userSession.session.userId} />
                 </Grid>
               </CardContent>
               <Divider />
