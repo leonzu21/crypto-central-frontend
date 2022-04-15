@@ -5,17 +5,18 @@ export const fetchWrapper = {
   delete: _delete,
 };
 
-function get(url, token) {
+async function get(url, token) {
   let authHeader = null;
   if (token) authHeader = { Authorization: `Bearer ${token}` };
   const requestOptions = {
     method: "GET",
     headers: { ...authHeader },
   };
-  return fetch(url, requestOptions).then(handleResponse);
+  const response = await fetch(url, requestOptions);
+  return handleResponse(response);
 }
 
-function post(url, body, token) {
+async function post(url, body, token) {
   let authHeader = null;
   if (token) authHeader = { Authorization: `Bearer ${token}` };
   const requestOptions = {
@@ -23,10 +24,11 @@ function post(url, body, token) {
     headers: { ...authHeader, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   };
-  return fetch(url, requestOptions).then(handleResponse);
+  const response = await fetch(url, requestOptions);
+  return handleResponse(response);
 }
 
-function put(url, body, token) {
+async function put(url, body, token) {
   let authHeader = null;
   if (token) authHeader = { Authorization: `Bearer ${token}` };
   const requestOptions = {
@@ -34,18 +36,20 @@ function put(url, body, token) {
     headers: { ...authHeader, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   };
-  return fetch(url, requestOptions).then(handleResponse);
+  const response = await fetch(url, requestOptions);
+  return handleResponse(response);
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-function _delete(url, token) {
+async function _delete(url, token) {
   let authHeader = null;
   if (token) authHeader = { Authorization: `Bearer ${token}` };
   const requestOptions = {
     method: "DELETE",
     headers: { ...authHeader },
   };
-  return fetch(url, requestOptions).then(handleResponse);
+  const response = await fetch(url, requestOptions);
+  return handleResponse(response);
 }
 
 // helper functions
