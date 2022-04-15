@@ -28,7 +28,8 @@ export const authOptions = {
 
     async session({ session, token }) {
       session.accessToken = token.accessToken;
-      return {session, token};
+      session.userId = token.sub.replace("auth0|", "");
+      return { session, token };
     },
   },
 };
