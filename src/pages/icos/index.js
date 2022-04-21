@@ -24,7 +24,6 @@ const Icos = ({ userSession }) => {
 
     toolbar = <IcoListToolbar />;
   }
-  console.log(icos);
 
   function deleteIco(id) {
     setIcos(
