@@ -137,7 +137,11 @@ const IcoAddEdit = (props) => {
                           value={value}
                           onChange={onChange}
                           renderInput={(params) => (
-                            <TextField fullWidth {...params} />
+                            <TextField
+                              InputLabelProps={{ shrink: true }}
+                              fullWidth
+                              {...params}
+                            />
                           )}
                         />
                       )}
@@ -337,7 +341,11 @@ const IcoAddEdit = (props) => {
                       {errors.description?.message}
                     </span>
                   </Grid>
-                  <input type="hidden" {...register("user")} value={props.userSession.session.userId} />
+                  <input
+                    type="hidden"
+                    {...register("user")}
+                    value={props.userSession.session.userId}
+                  />
                 </Grid>
               </CardContent>
               <Divider />
