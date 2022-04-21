@@ -39,7 +39,7 @@ const SituationPieChart = ({ symbols, ...rest }) => {
                 <text
                   x={x}
                   y={y}
-                  fill="white"
+                  fill={theme.palette.primary.main}
                   textAnchor={x > cx ? "start" : "end"}
                   dominantBaseline="central"
                 >
