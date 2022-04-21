@@ -16,6 +16,7 @@ export const authOptions = {
   secret: process.env.AUTH_SECRET,
   session: {
     jwt: true,
+    maxAge: 30 * 24 * 60 * 60
   },
 
   callbacks: {
