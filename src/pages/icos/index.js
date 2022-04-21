@@ -12,6 +12,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 const Icos = ({ userSession }) => {
   const [icos, setIcos] = useState(null);
 
+
   let toolbar = "You must be logged in to add ICOs";
 
   if (userSession) {
@@ -23,6 +24,7 @@ const Icos = ({ userSession }) => {
 
     toolbar = <IcoListToolbar />;
   }
+  console.log(icos);
 
   function deleteIco(id) {
     setIcos(
@@ -41,7 +43,7 @@ const Icos = ({ userSession }) => {
   return (
     <>
       <Head>
-        <title>Products | Material Kit</title>
+        <title>ICO | Material Kit</title>
       </Head>
       <Box
         component="main"
