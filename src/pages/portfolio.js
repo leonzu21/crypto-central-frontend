@@ -34,18 +34,23 @@ const Portfolio = (props) => {
   }
 
   function fetchTransactions() {
-    portfolioTransactionService
-      .getAllByPortfolio(
-        props.userSession.session.accessToken,
-        getHalId(portfolio)
-      )
-      .then((x) => setTransactions(x._embedded.portfolioTransactions));
+    if (portfolio)
+      portfolioTransactionService
+        .getAllByPortfolio(
+          props.userSession.session.accessToken,
+          getHalId(portfolio)
+        )
+        .then((x) => setTransactions(x._embedded.portfolioTransactions));
   }
 
   function fetchSituation() {
-    portfolioService
-      .getSituation(props.userSession.session.accessToken, getHalId(portfolio))
-      .then((x) => setSituation(x));
+    if (portfolio)
+      portfolioService
+        .getSituation(
+          props.userSession.session.accessToken,
+          getHalId(portfolio)
+        )
+        .then((x) => setSituation(x));
   }
 
   function submitTransactionForm() {
