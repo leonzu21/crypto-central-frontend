@@ -29,7 +29,7 @@ export const authOptions = {
 
     async session({ session, token }) {
       session.accessToken = token.accessToken;
-      session.userId = token.sub.replace("auth0|", "");
+      session.userId = token.sub.substring(token.sub.lastIndexOf("|") + 1);
       return { session, token };
     },
   },
